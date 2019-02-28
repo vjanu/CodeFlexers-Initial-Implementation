@@ -1,0 +1,46 @@
+10-30
+----------
+Driver 25
+Body Guard 20
+Security Officer 17
+Clerical Staff 15
+
+
+31-50
+----------
+intern 32
+Administrative Assistant 42
+Associate Enginner 42
+Bank Assistant 38
+IT Support 40
+Cashier 35
+Clerks 35
+
+51-70
+----------
+Network Engineer 55
+Software Engineer 55
+Database Administrator 60
+Project Manager 68
+Senior HR 63
+
+71-90
+----------
+Nurse 80
+Lecturer 80
+Teacher 75
+Tech Lead 85
+
+
+91-110
+----------
+Doctor 98
+Lawyer 95
+Professor 105
+Senior Lecturer 100
+Senior Lead 97
+Senior Accountant 92
+CEO 105
+CIO 105
+IT Director 95
+Manager 91

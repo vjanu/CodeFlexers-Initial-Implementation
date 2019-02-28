@@ -1,0 +1,17 @@
+1) Passeger search with destination
+2) Get passenger details from the dataset
+3) Apply rule base
+4) write result to csv
+5) kmeans with profession and age
+6) Get cluster index of passenger
+7) Get entries in that cluster
+8) Remove UID which has in passenger report array
+9) Sort list with highest rating
+
+
+#errors(Smoking|Music_Lover|Motion_Sickness|Like_Quietness)
+No	No	Yes	Yes 
+No	No	No	No
+Yes	Yes	Yes	Yes
+
+ 
