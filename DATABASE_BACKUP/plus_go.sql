@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `rating_vehicle` (
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
-  `UId` varchar(255) NOT NULL,
+  `UID` varchar(255) NOT NULL,
   `Username` varchar(255) NOT NULL,
   `Password` varchar(255) NOT NULL,
   `fname` varchar(255) NOT NULL,
@@ -96,11 +96,24 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 CREATE TABLE IF NOT EXISTS `vehicle` (
   `VehicleId` varchar(255) NOT NULL,
-  `UId` varchar(255) NOT NULL,
+  `UID` varchar(255) NOT NULL,
   `Model` varchar(20) NOT NULL,
   `vehicleRating` varchar(20) NOT NULL DEFAULT '5'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reported_drivers`
+--
+
+CREATE TABLE IF NOT EXISTS `reported_driver` (
+  `tripId` varchar(50) NOT NULL,
+  `passengerId` varchar(255) NOT NULL,
+  `reportedDriverId` varchar(255) NOT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
