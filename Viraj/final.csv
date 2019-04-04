@@ -1,14 +1,25 @@
 UID,Profession,Rating,Age,Profession_Category,Language_Spoken,Gender_Preference,Smoking,Music_Lover,Motion_Sickness,Like_Quietness,Cluster
-384099548152,Senior Accountant,4.7,38,92,Sinhala,Male,No,Yes,No,Yes,0
-791329504575,Senior Accountant,2.8,50,100,Sinhala,Male,No,Yes,No,Yes,0
-486364214303,Senior Accountant,4.5,35,100,Sinhala,Male,No,Yes,No,Yes,0
-319699085743,Senior Accountant,2.1,24,100,Sinhala,Male,No,Yes,No,Yes,0
-621171209290,Senior Accountant,2.0,35,100,Sinhala,Male,No,Yes,No,Yes,0
-394201664736,IT Support,2.3,27,40,English,Male,No,Yes,No,Yes,1
-380324249740,IT Support,2.9,18,40,Sinhala,Male,No,Yes,No,Yes,1
-611554934700,IT Support,3.0,30,40,Sinhala,Male,No,Yes,No,Yes,1
-541216871561,IT Support,4.8,38,35,Sinhala,Male,No,Yes,No,Yes,1
-548890547759,Teacher,4.2,30,85,Sinhala,Male,No,Yes,No,Yes,2
-637223108404,Tech Lead,2.0,29,85,Sinhala,Male,No,Yes,No,Yes,2
-642316214543,Tech Lead,3.7,30,85,Sinhala,Male,No,Yes,No,Yes,2
-632162889281,Tech Lead,4.1,34,85,Sinhala,Male,No,Yes,No,Yes,2
+395135649330,Network Engineer,2.0,32,55,Sinhala,No,Yes,Yes,Yes,Yes,0
+950200675646,Network Engineer,3.1,30,55,Sinhala,No,Yes,Yes,Yes,Yes,0
+389613720907,Network Engineer,2.1,33,55,Sinhala,No,Yes,Yes,Yes,Yes,0
+462992900303,Network Engineer,4.8,33,55,Sinhala,No,Yes,Yes,Yes,Yes,0
+929501181777,Network Engineer,3.8,24,55,Sinhala,No,Yes,Yes,Yes,Yes,0
+508234470710,Lawyer,3.2,33,95,Sinhala,No,Yes,Yes,Yes,Yes,1
+192724384307,Lawyer,4.3,32,95,Sinhala,No,Yes,Yes,Yes,Yes,1
+300199893115,Lawyer,2.1,30,95,Sinhala,No,Yes,Yes,Yes,Yes,1
+230496802076,Lawyer,4.0,33,95,Sinhala,No,Yes,Yes,Yes,Yes,1
+349150645720,Doctor,4.2,33,95,Sinhala,No,Yes,Yes,Yes,Yes,1
+996003282920,Doctor,4.4,24,98,Sinhala,No,Yes,Yes,Yes,Yes,1
+540748974984,Lawyer,3.6,32,95,Sinhala,No,Yes,Yes,Yes,Yes,1
+517011168906,Driver,5.0,32,25,Sinhala,No,Yes,Yes,Yes,Yes,2
+966714454144,Security Officer,4.9,23,15,Sinhala,No,Yes,Yes,Yes,Yes,2
+461577525172,Body Guard,3.9,31,30,Sinhala,No,Yes,Yes,Yes,Yes,2
+483075370677,Clerk,2.6,31,33,Sinhala,No,Yes,Yes,Yes,Yes,2
+618237461123,Security Officer,2.1,31,21,Sinhala,No,Yes,Yes,Yes,Yes,2
+408453901605,Body Guard,4.3,25,21,Sinhala,No,Yes,Yes,Yes,Yes,2
+147688808452,Driver,2.3,25,27,Sinhala,No,Yes,Yes,Yes,Yes,2
+328718805087,Clerk,3.2,25,30,Sinhala,No,Yes,Yes,Yes,Yes,2
+310119731281,Driver,2.2,31,25,Sinhala,No,Yes,Yes,Yes,Yes,2
+544571380092,Driver,3.6,23,25,Sinhala,No,Yes,Yes,Yes,Yes,2
+876122035540,Clerk,3.8,23,10,Sinhala,No,Yes,Yes,Yes,Yes,2
+81444871489,Driver,5.0,29,15,Sinhala,No,Yes,Yes,Yes,Yes,2

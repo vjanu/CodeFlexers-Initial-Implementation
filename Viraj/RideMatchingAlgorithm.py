@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import csv
 import json
+import re
 from flask import Flask, jsonify
-df = pd.read_csv('users.csv')
+df = pd.read_csv('datausers.csv')
 app = Flask(__name__)
 #get the userID of the passenger(Frontend fetch)
-UID = 130079
-
+UID = 544571380092
 
 #get the index of the row which belongs to particular passenger
 index = df[df['UID']== UID].index.values.astype(int)[0]
@@ -24,16 +24,16 @@ index = df[df['UID']== UID].index.values.astype(int)[0]
 #print(df[df['UID']== UID].iloc[:,10]) # print data of the row
 
 
-#get the properties of the specified user and assign it to variables
-isSmoking = df[df['UID']== UID].iloc[:,11].values[0]
-isMusicLover = df[df['UID']== UID].iloc[:,12].values[0]
-isMotionSickness = df[df['UID']== UID].iloc[:,13].values[0]
-isLikeQuietness = df[df['UID']== UID].iloc[:,14].values[0]
-isGenderPrefered = df[df['UID']== UID].iloc[:,10].values[0]
-
 @app.route('/ridematching/rules', methods=['GET'])
-def executeRules(smokingFlag, musicFlag, motionFlag, quietnessFlag, genderFlag):
-	return rules(isSmoking, isMusicLover, isMotionSickness, isLikeQuietness)
+def executeRules():
+	#get the properties of the specified user and assign it to variables
+	isSmoking = df[df['UID']== UID].iloc[:,7].values[0]
+	isMusicLover = df[df['UID']== UID].iloc[:,8].values[0]
+	isMotionSickness = df[df['UID']== UID].iloc[:,9].values[0]
+	isLikeQuietness = df[df['UID']== UID].iloc[:,10].values[0]
+	isGenderPrefered = df[df['UID']== UID].iloc[:,6].values[0]
+	rules(isSmoking, isMusicLover, isMotionSickness, isLikeQuietness, isGenderPrefered)
+	return "success";
 
 @app.route('/ridematching/kmeans', methods=['GET'])
 def getSuitableDriverList():
@@ -53,7 +53,7 @@ def rules(smokingFlag, musicFlag, motionFlag, quietnessFlag, genderFlag):
 
 def driverList():
 	dataset = pd.read_csv('newUsers.csv')
-	X = dataset.iloc[:,[4,5]].values # read columns Age-x axis and Profession-y axis
+	X = dataset.iloc[:,[3,4]].values # read columns Age-x axis and Profession-y axis
 
 	# Using the elbow method to find the optimal number of clusters
 	from sklearn.cluster import KMeans
@@ -74,7 +74,7 @@ def driverList():
 	dataset.to_csv('final.csv', index=False)
 
 	#specify the cluster where the particular passenger belongs to
-	n = dataset[dataset['UID']== UID].iloc[:,15].values[0]
+	n = dataset[dataset['UID']== UID].iloc[:,11].values[0]
 
 	#ds = X[np.where(kmeans.labels_== n)] #get particular cluster
 	#print(ds)
@@ -82,12 +82,13 @@ def driverList():
 
 	#Initialize lists required
 	uIDList= list()
+	formattedUIDList= list()
 	filteredList=list()
 
 	dataListOfSuitableDrivers = dataset.loc[dataset['Cluster'] == n, ['UID']]
 	uIDList = dataListOfSuitableDrivers.values.tolist()
     # remove reported drivers from the list(uIDList - entries from db)
-	uIDList.remove([161493])
+	#uIDList.remove([161493])
 	#print(uIDList)
 	
 	dataListOfSuitableDrivers.to_csv('selectedDrivers.csv', index=False)
@@ -96,20 +97,24 @@ def driverList():
 	#database call to get reported list for particular UID
 	#filteredList = uIDList - [1,2,3,4,5]
 	
-	filteredList = [1,2,3,4,5]
+	#removing unwanted characters from the list
+	for uid in uIDList:
+		formattedUIDList.append(uid[0]) 
+
+	
+	#filteredList = [1,2,3,4,5]
 
 	#dataset = pd.DataFrame(filteredList)
 	#dataset.to_csv('selectedDrivers.csv')
-	return json.dumps(uIDList)
-	#with open("selectedDrivers.csv","w") as f:
-	 #   wr = csv.writer(f,delimiter="\n")
-	  #  wr.writerow(uIDList)
-		
-	#for x in uIDList:
-		#print(x) #dummy printing the list
+	
+	#return the final driver list in JSON
+	return jsonify(
+	UID = formattedUIDList
+	)
+
 		
 	#print(dataset[kmeans.labels_== n]) # get dataset in each cluster
 	#print(dataset['UID']== UID) # get true for paticular row
 	#print(dataset[dataset['UID']== UID].index.values.astype(int)[0]) # get index of row which has UID index
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(debug=True, host="0.0.0.0", port=80)
