@@ -9,7 +9,7 @@ const mysql = require('mysql');
 // })
 
 const db = mysql.createConnection({
-    host:'192.168.1.8',
+    host:'192.168.1.3',
     user:'admin',
     password:'123',
     database:'plus_go'

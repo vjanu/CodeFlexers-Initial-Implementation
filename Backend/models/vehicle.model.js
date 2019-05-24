@@ -43,8 +43,7 @@ exports.addVehicle = function (req,res) {
         FuelType:rbody.FuelType,
         TType:rbody.TType,
         EngineCapacity:rbody.EngineCapacity,
-        FrontView:rbody.FrontView,
-        BackView:rbody.BackView
+        FrontView:rbody.FrontView
     };
     var sql='INSERT INTO vehicle SET ?'
     var query = db.query(sql,post,(err,rows,results)=>{
@@ -79,8 +78,8 @@ exports.addVehicle = function (req,res) {
     var rbody = req.body;
    
  
-    var sql = "UPDATE vehicle SET Brand=?,Model=?, Mileage=?,MYear=?,RYear=?,FuelType=?,TType=?,EngineCapacity=?,FrontView=?,BackView=? WHERE UserID =" + uid
-    db.query(sql,[rbody.Brand,rbody.Model,rbody.Mileage,rbody.MYear,rbody.RYear,rbody.FuelType,rbody.TType,rbody.EngineCapacity,rbody.FrontView,rbody.BackView], function (err,rows, result) {
+    var sql = "UPDATE vehicle SET Brand=?,Model=?, Mileage=?,MYear=?,RYear=?,FuelType=?,TType=?,EngineCapacity=?,FrontView=?WHERE UserID =" + uid
+    db.query(sql,[rbody.Brand,rbody.Model,rbody.Mileage,rbody.MYear,rbody.RYear,rbody.FuelType,rbody.TType,rbody.EngineCapacity,rbody.FrontView], function (err,rows, result) {
         if(!err){
             res.send(rows);
             // console.log(rows);
