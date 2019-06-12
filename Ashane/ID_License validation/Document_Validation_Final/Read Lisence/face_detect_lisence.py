@@ -3,7 +3,7 @@ import sys
 import imutils
 
 # Path of working folder on Disk
-src_path = "tes-img/"
+#src_path = "tes-img/"
 
 def checkFaces(img_path):
     # Get user supplied values
@@ -31,23 +31,21 @@ def checkFaces(img_path):
     )
 
     print("Found {0} faces!".format(len(faces)))
-    
+
     if(len(faces)!=1):
-        validate = "false"
         print("Please insert a valid image")
-        #TODO : rotate it with 90degrees and check again
     else:
         print("Image verified")
-        
-    #Draw a rectangle around the faces
-    for (x, y, w, h) in faces:
-        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-    cv2.imshow("Faces found", image)
-    cv2.waitKey(0)
+    # Draw a rectangle around the faces
+    # for (x, y, w, h) in faces:
+    #     cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+    # cv2.imshow("Faces found", image)
+    # cv2.waitKey(0)
     return len(faces)
 
 #Calling the methods
-print("--Started image processing for NIC using face recognition--")
-imgPath = src_path + "r.jpg"
-noOfFaces = checkFaces(imgPath)
+#print("--Started image processing for lisence--")
+#checkFaces(src_path + "lisence.jpg")
+

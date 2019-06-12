@@ -1,14 +1,16 @@
+from flask import jsonify,Flask
 import cv2
 import numpy as np
 import pytesseract
 import imutils
 from PIL import Image
 from pytesseract import image_to_string
-import colorChange
+import colorChange as cc
 import face_detect_nic as fd
 
 # Path of working folder on Disk
 src_path = "tes-img/"
+filename = ""
 
 def get_stringOldIdCard(img_path):
     # Read image with opencv
@@ -53,7 +55,7 @@ def get_stringOldIdCard(img_path):
     result = result.replace("i", "1")
     result = result.replace("l", "1")
     # result = result.replace("g", "0")
-    
+    print(result)
     resultArray = result.split('\n')
     nic = "Not Found"
     for x in resultArray:
@@ -61,13 +63,13 @@ def get_stringOldIdCard(img_path):
             nic = x
             nic = nic.split(" v")[0]
             nic = nic.replace(" ", "")
-            if(len(nic) >= 9 ):
+            if(len(nic) == 9 ):
                 break
         elif (" V" in x):
             nic = x
             nic = nic.split(" V")[0]
             nic = nic.replace(" ", "")
-            if(len(nic) >= 9 ):
+            if(len(nic) == 9 ):
                 break
         elif ("v" in x):
             nic = x
@@ -80,7 +82,7 @@ def get_stringOldIdCard(img_path):
     nic = nic.replace(" ", "")
     nic = nic.replace("v","0")
     nic = nic[-9:]
-    #print(resultArray)
+    print(resultArray)
     if(len(nic) == 9 ):
         print("Old NIC contains 9 digits only --> Converted to 12 digit format")
         nic = '19' + nic[:5]+'0'+nic[5:]
@@ -88,17 +90,35 @@ def get_stringOldIdCard(img_path):
     # print(resultString)
     return list(nic)
 
+#Main method imlementation as a web service
+app = Flask(__name__)
 
-#print(fd.noOfFaces)
-if(fd.noOfFaces == 1):
+@app.route("/nic/<string:location>")
+def main(location):
+    global filename
+    filename = location
     print('--- Start recognize text from NIC ---')
-# print(get_stringOldIdCard(src_path + "changedclr.bmp") )
-# if(get_stringOldIdCard(src_path + "changedclr.bmp")==['N', 'o', 't', 'F', 'o', 'u', 'n', 'd']):
-#     #name of the original file:CHANGE THIS ACCORDINGLY
-#     print(get_stringOldIdCard(src_path + "n.jpg") )
-
-
-    print(get_stringOldIdCard(src_path + "changedclr1.bmp") )
-    if(len(get_stringOldIdCard(src_path + "changedclr1.bmp"))!=12):
-        print(get_stringOldIdCard(src_path + "changedclr.bmp") )    
+    try: 
+        if(fd.checkFaces(src_path + filename) >= 1):  
+            cc.colorChange(src_path + filename)
+            print(get_stringOldIdCard(src_path + "changedclr1.bmp") )
+            ExtractedNIC = get_stringOldIdCard(src_path + "changedclr1.bmp")
+            if(len(get_stringOldIdCard(src_path + "changedclr1.bmp"))!=12):
+                print(get_stringOldIdCard(src_path + "changedclr.bmp") ) 
+                ExtractedNIC = get_stringOldIdCard(src_path + "changedclr.bmp")   
+            Description="Processed"
+        else:
+            ExtractedNIC="null"
+            Description="Unable to recognize human faces" 
+    except:
+        ExtractedNIC="null"
+        Description="Unexpected error,Unable to process the image,Please check the path" 
     print("------ Done -------")
+    
+    #return as a json object
+    return jsonify(
+    ExtractedNIC = ExtractedNIC,
+    Description = Description
+    )   
+        
+app.run(debug=True,host="0.0.0.0",port=80)
