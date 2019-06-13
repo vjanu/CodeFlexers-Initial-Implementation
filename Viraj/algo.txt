@@ -8,22 +8,29 @@ import pandas as pd
 import csv
 import json
 import re
-from flask import Flask, jsonify, request
-import mysql.connector
-
-mydb = mysql.connector.connect(
-  host="db4free.net",
-  user="cdapadmin",
-  passwd="cdapcdap",
-  database="plusgo"
-)
-
-mycursor = mydb.cursor()
-
+from flask import Flask, jsonify
 df = pd.read_csv('datausers.csv')
 
 app = Flask(__name__)
 
+#get the userID of the passenger(Frontend fetch)
+
+#UID = UserID
+#UID = 517011168906
+
+#get the index of the row which belongs to particular passenger
+#index = df[df['UID']== UID].index.values.astype(int)[0]
+#print(df.iloc[index]) # print data of the row
+#print(df[df['UID']== UID].iloc[:,11]) # print data of the row
+#print(df[df['UID']== UID].iloc[:,12]) # print data of the row
+#print(df[df['UID']== UID].iloc[:,13]) # print data of the row
+#print(df[df['UID']== UID].iloc[:,14]) # print data of the row
+#print(df[df['UID']== UID].iloc[:,10]) # print data of the row
+
+
+
+
+#@app.route('/ridematching/rules', methods=['GET'])
 def executeRules(UserID):
 	global UID
 	UID = int(float(UserID))
@@ -36,40 +43,24 @@ def executeRules(UserID):
 	isGenderPrefered = df[df['UID']== UID].iloc[:,6].values[0]
 	rules(isSmoking, isMusicLover, isMotionSickness, isLikeQuietness, isGenderPrefered)
 	
-@app.route('/ridematching/write', methods=['POST'])
-def getFileData():
-	uid = request.get_json().get('UID')
-	profession = request.get_json().get('Profession')
-	rating = request.get_json().get('Rating')
-	age = request.get_json().get('Age')
-	profCat = request.get_json().get('Profession_Category')
-	language = request.get_json().get('Language_Spoken')
-	genderPref = request.get_json().get('Gender_Preference')
-	smoking = request.get_json().get('Smoking')
-	musicL = request.get_json().get('Music_Lover')
-	motionS = request.get_json().get('Motion_Sickness')
-	likeQ = request.get_json().get('Like_Quietness')
-	
-	writeToFile(uid,profession,rating,age,profCat,language,genderPref,smoking,musicL,motionS,likeQ)
-	return 'Added to the file'
 
-def writeToFile(uid,profession,rating,age,profCat,language,genderPref,smoking,musicL,motionS,likeQ):
-	fields=[uid,profession,rating,age,profCat,language,genderPref,smoking,musicL,motionS,likeQ]
-	with open(r'datausers.csv', 'a', newline='') as f:
-		writer = csv.writer(f)
-		writer.writerow(fields)
+@app.route('/ridematching/kmeans/<UserID>', methods=['GET'])
+def getSuitableDriverList(UserID):
 	
-@app.route('/ridematching/kmeans/user', methods=['POST'])
-def getSuitableDriverList():
-	UserID = request.get_json().get('UID')
 	return driverList(UserID)
 
 
 #Defining rules for the filteration
+#todo add more rules - language spoken?
 def rules(smokingFlag, musicFlag, motionFlag, quietnessFlag, genderFlag):
 	df.loc[(df['Smoking'] == smokingFlag) & (df['Music_Lover'] == musicFlag) & (df['Motion_Sickness'] == motionFlag) & (df['Gender_Preference'] == genderFlag) 
 	& (df['Like_Quietness'] == quietnessFlag)].to_csv('newUsers.csv', index=False);
 	
+
+#Execute rule based mechanism 
+#rules(isSmoking, isMusicLover, isMotionSickness, isLikeQuietness);
+
+
 def driverList(UserID):
 	executeRules(UserID)
 	#UID = 650444020925
@@ -104,25 +95,13 @@ def driverList(UserID):
 	#Initialize lists required
 	uIDList= list()
 	formattedUIDList= list()
-	reportedList=list()
+	filteredList=list()
 
 	dataListOfSuitableDrivers = dataset.loc[dataset['Cluster'] == n, ['UID']]
 	uIDList = dataListOfSuitableDrivers.values.tolist()
     # remove reported drivers from the list(uIDList - entries from db)
-	mycursor.execute("SELECT DUID FROM reported_drivers WHERE PUID="+UserID)
-
-	myresult = mycursor.fetchall()
-
-	#for x in myresult:
-	  #print('['+str(x[0]).replace('\'', '')+']')
-	  
-	  #w=x[0].replace('\'', '')
-	  #n = '['+w+']'
-	  #print(w)
-	  #print(n)
-	  #reportedList.append('['+str(x[0]).replace('\'', '')+']'[0])
-	  #uIDList.remove(x[0])
-	#print(reportedList)
+	#uIDList.remove([161493])
+	#print(uIDList)
 	
 	dataListOfSuitableDrivers.to_csv('selectedDrivers.csv', index=False)
 	#uIDList.append(dataListOfSuitableDrivers.get('UID'))
@@ -144,6 +123,10 @@ def driverList(UserID):
 	#return the final driver list in JSON
 	return jsonify(UID = formattedUIDList)
 
+		
+	#print(dataset[kmeans.labels_== n]) # get dataset in each cluster
+	#print(dataset['UID']== UID) # get true for paticular row
+	#print(dataset[dataset['UID']== UID].index.values.astype(int)[0]) # get index of row which has UID index
 	
 if __name__ == '__main__':
-	app.run(debug=True, host="192.168.43.102", port=99)
+	app.run(debug=True, host="192.168.1.2", port=99)
