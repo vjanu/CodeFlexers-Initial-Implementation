@@ -9,10 +9,10 @@ const mysql = require('mysql');
 // })
 
 const db = mysql.createConnection({
-    host:'192.168.1.3',
-    user:'admin',
-    password:'123',
-    database:'plus_go'
+    host:'db4free.net',
+    user:'cdapadmin',
+    password:'cdapcdap',
+    database:'plusgo'
 }) 
 
 db.connect((err) => {
