@@ -1,9 +1,24 @@
 import csv   
-
+import json
+import pandas as pd
 from flask import Flask, jsonify, request
 
 
 app = Flask(__name__)
+
+@app.route('/x', methods=['POST'])
+def getFile():
+	uIDList= list()
+	df = pd.read_csv('test.csv')
+	
+	for x in range(0, len(request.get_json().get('uid'))): 
+		uIDList.append(request.get_json().get('uid')[x].get('UID'))
+	
+	for y in range(0, len(uIDList)):	
+		print(uIDList)
+		df.loc[(df['UID'] == uIDList[y])].to_csv('test12.csv',index=False, mode='a', header=False);	
+
+	return 'ccc'
 
 @app.route('/ridematching/write', methods=['POST'])
 def getFileData():
