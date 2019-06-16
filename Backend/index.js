@@ -7,7 +7,8 @@ const multer = require('multer');
 var multipart = require('connect-multiparty');
 const app = express();
 
-app.use(bodyparser.json());
+app.use(bodyparser.json({limit: "50mb"}));
+app.use(bodyparser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 app.use('/',routes);
 
 //to get the path of images
