@@ -9,6 +9,7 @@ const telephoneroute = require('./controllers/telephone.controller');
 const ratingroute = require('./controllers/rating.controller');
 const roadcauseroute = require('./controllers/roadcause.controller');
 const tripsummaryroute = require('./controllers/trip_summary.controller');
+const offerrideroute = require('./controllers/offerride.controller');
 
 
 routes.use('/login',loginroute);
@@ -20,5 +21,6 @@ routes.use('/telephone',telephoneroute);
 routes.use('/ratings',ratingroute);
 routes.use('/roadcause',roadcauseroute);
 routes.use('/tripsummary',tripsummaryroute);
+routes.use('/addofferride',offerrideroute);
 
 module.exports = routes;
