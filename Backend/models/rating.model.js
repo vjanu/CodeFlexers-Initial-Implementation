@@ -4,7 +4,7 @@ var db = require('../db.schema');
 //model to get personal rating from table view
 exports.getPersonalRatings = function (req,res) {
    var pid = "'" + req.params.personid + "'";
-   var sql="SELECT * FROM ratingsView where personID =" + pid //Correct this according to view
+   var sql="SELECT * FROM V_PERSONAL_RATING where UID =" + pid //Correct this according to view
    var query= db.query(sql,(err,rows,results)=>{
        if(!err){
            res.send(rows);
@@ -29,22 +29,76 @@ exports.getvehicleRatings = function (req,res) {
    })
 };
 
-//model to add driver rating
+//model to add driver rating by passenger
 exports.addDriverRating = function (req,res) {
    var rbody = req.body;    
    var avgRating = (rbody.GivenRating + rbody.CalculatedRating)/2;
    var post = {
-       TripId:rbody.TripId,
-       DriverId:rbody.DriverId,
-       RatedBy:rbody.RatedBy,
+      TripId:rbody.TripId,
+      UserID:rbody.UserID,
+      UserType:"driver",
+      RatedBy:rbody.RatedBy,
+      GivenRating:rbody.GivenRating,
+      CalculatedRating:rbody.CalculatedRating,
+      AverageRating:avgRating,
+      Compliment:rbody.Compliment,
+      Dissatisfaction:rbody.Dissatisfaction,
+      Sentiment :rbody.Sentiment 
+   };
+   var sql='INSERT INTO rating_personal SET ?'
+   var query = db.query(sql,post,(err,rows,results)=>{
+       if(!err){
+           res.send(rows);
+           console.log(rows);
+       }
+       else
+        console.log(err);
+   })
+};
+
+//model to add passenger rating by driver
+exports.addPassengerRating = function (req,res) {
+   var rbody = req.body;    
+   var avgRating = (rbody.GivenRating + rbody.CalculatedRating)/2;
+   var post = {
+      TripId:rbody.TripId,
+      UserID:rbody.UserID,
+      UserType:"passenger",
+      RatedBy:rbody.RatedBy,
        GivenRating:rbody.GivenRating,
        CalculatedRating:rbody.CalculatedRating,
        AverageRating:avgRating,
-       Compliment:rbody.GivenRating,
+       Compliment:rbody.Compliment,
        Dissatisfaction:rbody.Dissatisfaction,
        Sentiment :rbody.Sentiment 
    };
-   var sql='INSERT INTO rating_driver SET ?'
+   var sql='INSERT INTO rating_personal SET ?'
+   var query = db.query(sql,post,(err,rows,results)=>{
+       if(!err){
+           res.send(rows);
+           console.log(rows);
+       }
+       else
+        console.log(err);
+   })
+};
+
+//model to add co-passenger rating by passenger
+exports.addCopassengerRating = function (req,res) {
+   var rbody = req.body;    
+   var avgRating = (rbody.GivenRating + rbody.CalculatedRating)/2;
+   var post = {
+      TripId:rbody.TripId,
+      UserID:rbody.UserID,
+      UserType:"copassenger",
+      RatedBy:rbody.RatedBy,
+      GivenRating:rbody.GivenRating,
+      CalculatedRating:rbody.CalculatedRating,
+      AverageRating:avgRating,
+      Dissatisfaction:rbody.Dissatisfaction,
+      Sentiment :rbody.Sentiment 
+   };
+   var sql='INSERT INTO rating_personal SET ?'
    var query = db.query(sql,post,(err,rows,results)=>{
        if(!err){
            res.send(rows);
@@ -70,31 +124,6 @@ exports.addVehicleRating = function (req,res) {
       Sentiment :rbody.Sentiment 
    };
    var sql='INSERT INTO rating_vehicle SET ?'
-   var query = db.query(sql,post,(err,rows,results)=>{
-       if(!err){
-           res.send(rows);
-           console.log(rows);
-       }
-       else
-        console.log(err);
-   })
-};
-
-//model to add co-passenger rating
-exports.addCopassengerRating = function (req,res) {
-   var rbody = req.body;    
-   var avgRating = (rbody.GivenRating + rbody.CalculatedRating)/2;
-   var post = {
-      tripId:rbody.tripId,
-      CopassengerId:rbody.CopassengerId,
-      RatedBy:rbody.RatedBy,
-      GivenRating:rbody.GivenRating,
-      CalculatedRating:rbody.CalculatedRating,
-      AverageRating:avgRating,
-      Dissatisfaction:rbody.Dissatisfaction,
-      Sentiment :rbody.Sentiment 
-   };
-   var sql='INSERT INTO rating_copassenger SET ?'
    var query = db.query(sql,post,(err,rows,results)=>{
        if(!err){
            res.send(rows);
