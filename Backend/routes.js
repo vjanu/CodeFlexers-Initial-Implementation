@@ -6,6 +6,7 @@ const payroute = require('./controllers/payment.controller');
 const preferenceroute = require('./controllers/preference.controller');
 const vehicleroute = require('./controllers/vehicle.controller');
 const telephoneroute = require('./controllers/telephone.controller');
+const ratingroute = require('./controllers/rating.controller');
 const roadcauseroute = require('./controllers/roadcause.controller');
 
 
@@ -15,7 +16,7 @@ routes.use('/pay',payroute);
 routes.use('/preference',preferenceroute);
 routes.use('/vehicle',vehicleroute);
 routes.use('/telephone',telephoneroute);
+routes.use('/ratings',ratingroute);
 routes.use('/roadcause',roadcauseroute);
-
 
 module.exports = routes;
