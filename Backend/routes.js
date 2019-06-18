@@ -8,6 +8,7 @@ const vehicleroute = require('./controllers/vehicle.controller');
 const telephoneroute = require('./controllers/telephone.controller');
 const ratingroute = require('./controllers/rating.controller');
 const roadcauseroute = require('./controllers/roadcause.controller');
+const tripsummaryroute = require('./controllers/trip_summary.controller');
 
 
 routes.use('/login',loginroute);
@@ -18,5 +19,6 @@ routes.use('/vehicle',vehicleroute);
 routes.use('/telephone',telephoneroute);
 routes.use('/ratings',ratingroute);
 routes.use('/roadcause',roadcauseroute);
+routes.use('/tripsummary',tripsummaryroute);
 
 module.exports = routes;
