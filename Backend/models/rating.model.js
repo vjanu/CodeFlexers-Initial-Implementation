@@ -32,7 +32,7 @@ exports.getvehicleRatings = function (req,res) {
 //model to add driver rating by passenger
 exports.addDriverRating = function (req,res) {
    var rbody = req.body;    
-   var avgRating = (rbody.GivenRating + rbody.CalculatedRating)/2;
+   var avgRating = (parseInt(rbody.GivenRating) + parseInt(rbody.CalculatedRating))/2.0;
    var post = {
       TripId:rbody.TripId,
       UserID:rbody.UserID,
@@ -49,7 +49,7 @@ exports.addDriverRating = function (req,res) {
    var query = db.query(sql,post,(err,rows,results)=>{
        if(!err){
            res.send(rows);
-           console.log(rows);
+         //   console.log(rows);
        }
        else
         console.log(err);
@@ -59,24 +59,24 @@ exports.addDriverRating = function (req,res) {
 //model to add passenger rating by driver
 exports.addPassengerRating = function (req,res) {
    var rbody = req.body;    
-   var avgRating = (rbody.GivenRating + rbody.CalculatedRating)/2;
+   var avgRating = (parseInt(rbody.GivenRating) + parseInt(rbody.CalculatedRating))/2.0;
    var post = {
       TripId:rbody.TripId,
       UserID:rbody.UserID,
       UserType:"passenger",
       RatedBy:rbody.RatedBy,
-       GivenRating:rbody.GivenRating,
-       CalculatedRating:rbody.CalculatedRating,
-       AverageRating:avgRating,
-       Compliment:rbody.Compliment,
-       Dissatisfaction:rbody.Dissatisfaction,
-       Sentiment :rbody.Sentiment 
+      GivenRating:rbody.GivenRating,
+      CalculatedRating:rbody.CalculatedRating,
+      AverageRating:avgRating,
+      Compliment:rbody.Compliment,
+      Dissatisfaction:rbody.Dissatisfaction,
+      Sentiment :rbody.Sentiment 
    };
    var sql='INSERT INTO rating_personal SET ?'
    var query = db.query(sql,post,(err,rows,results)=>{
        if(!err){
            res.send(rows);
-           console.log(rows);
+         //   console.log(rows);
        }
        else
         console.log(err);
@@ -86,7 +86,7 @@ exports.addPassengerRating = function (req,res) {
 //model to add co-passenger rating by passenger
 exports.addCopassengerRating = function (req,res) {
    var rbody = req.body;    
-   var avgRating = (rbody.GivenRating + rbody.CalculatedRating)/2;
+   var avgRating = (parseInt(rbody.GivenRating) + parseInt(rbody.CalculatedRating))/2.0;
    var post = {
       TripId:rbody.TripId,
       UserID:rbody.UserID,
@@ -94,7 +94,7 @@ exports.addCopassengerRating = function (req,res) {
       RatedBy:rbody.RatedBy,
       GivenRating:rbody.GivenRating,
       CalculatedRating:rbody.CalculatedRating,
-      AverageRating:avgRating,
+      AverageRating:avgRating, // This is inserted automatically 
       Dissatisfaction:rbody.Dissatisfaction,
       Sentiment :rbody.Sentiment 
    };
@@ -102,7 +102,7 @@ exports.addCopassengerRating = function (req,res) {
    var query = db.query(sql,post,(err,rows,results)=>{
        if(!err){
            res.send(rows);
-           console.log(rows);
+         //   console.log(rows);
        }
        else
         console.log(err);
@@ -112,7 +112,7 @@ exports.addCopassengerRating = function (req,res) {
 //model to add driver rating
 exports.addVehicleRating = function (req,res) {
    var rbody = req.body;    
-   var avgRating = (rbody.GivenRating + rbody.CalculatedRating)/2;
+   var avgRating = (parseInt(rbody.GivenRating) + parseInt(rbody.CalculatedRating))/2.0;
    var post = {
       tripId:rbody.tripId,
       vehicleId:rbody.vehicleId,
@@ -127,7 +127,7 @@ exports.addVehicleRating = function (req,res) {
    var query = db.query(sql,post,(err,rows,results)=>{
        if(!err){
            res.send(rows);
-           console.log(rows);
+         //   console.log(rows);
        }
        else
         console.log(err);
@@ -146,7 +146,7 @@ exports.reportDrivers = function (req,res) {
    var query = db.query(sql,post,(err,rows,results)=>{
        if(!err){
            res.send(rows);
-           console.log(rows);
+         //   console.log(rows);
        }
        else
         console.log(err);
