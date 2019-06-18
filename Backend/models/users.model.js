@@ -38,6 +38,7 @@ exports.addUser = function (req,res) {
         Gender:rbody.Gender,
         RName:rbody.RName,
         RPhone:rbody.RPhone,
+        Age:rbody.Age,
         img:rbody.img
     };
     var sql='INSERT INTO users SET ?'
@@ -72,8 +73,8 @@ exports.addUser = function (req,res) {
     var uid = "'" + req.params.uid + "'";
     var rbody = req.body;
 
-    var sql = "UPDATE users SET FullName=?,Profession=?,Email=?,Gender=?,RName=?, RPhone=? WHERE UserID =" + uid
-    db.query(sql,[rbody.FullName,rbody.Profession,rbody.Email,rbody.Gender,rbody.RName,rbody.RPhone], function (err,rows, result) {
+    var sql = "UPDATE users SET FullName=?,Profession=?,Email=?,Age=?,Gender=?,RName=?, RPhone=? WHERE UserID =" + uid
+    db.query(sql,[rbody.FullName,rbody.Profession,rbody.Email,rbody.Age,rbody.Gender,rbody.RName,rbody.RPhone], function (err,rows, result) {
         if(!err){
             res.send(rows);
             // console.log(rows);
