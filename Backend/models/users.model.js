@@ -34,12 +34,13 @@ exports.addUser = function (req,res) {
         UserID:rbody.UserID,
         FullName:rbody.FullName,
         Profession:rbody.Profession,
-        Email:rbody.Email,
+        Email:rbody.Email, //user token
         Gender:rbody.Gender,
         RName:rbody.RName,
         RPhone:rbody.RPhone,
         Age:rbody.Age,
-        img:rbody.img
+        img:rbody.img,
+        Token: rbody.Token
     };
     var sql='INSERT INTO users SET ?'
     var query = db.query(sql,post,(err,rows,results)=>{
