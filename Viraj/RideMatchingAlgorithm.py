@@ -9,7 +9,7 @@ import csv
 import json
 import re
 from flask import Flask, jsonify, request
-import mysql.connector
+#import mysql.connector
 import os
 from tempfile import NamedTemporaryFile
 

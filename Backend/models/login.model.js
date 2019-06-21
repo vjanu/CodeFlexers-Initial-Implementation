@@ -35,7 +35,7 @@ exports.addUser = function (req,res) {
         UserID:UID,
         Username:rbody.Username,
         Password:rbody.Password,
-        Name:rbody.Name
+        Email:rbody.Email
     };
     var sql='INSERT INTO login SET ?'
     var query = db.query(sql,post,(err,rows,results)=>{
