@@ -11,6 +11,7 @@ const roadcauseroute = require('./controllers/roadcause.controller');
 const tripsummaryroute = require('./controllers/trip_summary.controller');
 const offerrideroute = require('./controllers/offerride.controller');
 const availableDriversroute = require('./controllers/availableDriverList.controller');
+const map = require('./controllers/map.controller');
 
 
 
@@ -25,5 +26,7 @@ routes.use('/roadcause',roadcauseroute);
 routes.use('/tripsummary',tripsummaryroute);
 routes.use('/addofferride',offerrideroute);
 routes.use('/available',availableDriversroute);
+routes.use('/map',map);
+
 
 module.exports = routes;
