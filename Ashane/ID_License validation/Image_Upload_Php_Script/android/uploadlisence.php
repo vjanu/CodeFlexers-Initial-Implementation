@@ -1,4 +1,4 @@
-<?php	
+<?php
 	class emp{}
 	
 	$image = $_POST['image'];
@@ -13,11 +13,15 @@
 		$random = random_word(20);
 		
 		//$path = "images/".$random.".png";
-		$path = "images/".$name.".png";
+		//$path = "images/".$name.".png";
+		//$path = "Document_Validation_Final/Read_Old_NIC/tes-img/".$name.".png";
+		$path = "file:///C:/Users/Ashane/Desktop/Read_Lisence/tes-img/".$name.".png";
 		
-		//ip address laptop/pc atau URL server
-		$actualpath = "localhost:8080/android/upload_image/$path";
-
+		// sesuiakan ip address laptop/pc atau URL server
+		//$actualpath = "http://192.168.10.177/android/upload_image/$path";
+		//$actualpath = "localhost:8080/android/upload_image/$path";
+		//$actualpath = "localhost:8080/android/$path";
+	
 			file_put_contents($path,base64_decode($image));
 			
 			$response = new emp();
@@ -26,7 +30,7 @@
 			die(json_encode($response));
 
 	}	
-	// random string 
+	
 	function random_word($id = 20){
 		$pool = '1234567890abcdefghijkmnpqrstuvwxyz';
 		
