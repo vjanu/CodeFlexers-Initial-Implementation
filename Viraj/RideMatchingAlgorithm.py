@@ -9,26 +9,28 @@ import csv
 import json
 import re
 from flask import Flask, jsonify, request
-import mysql.connector
+#import mysql.connector
 import os
+from tempfile import NamedTemporaryFile
 
+#mydb = mysql.connector.connect(
+ # host="db4free.net",
+  #user="cdapadmin",
+  #passwd="cdapcdap",
+  #database="plusgo"
+#)
 
-mydb = mysql.connector.connect(
-  host="db4free.net",
-  user="cdapadmin",
-  passwd="cdapcdap",
-  database="plusgo"
-)
-
-mycursor = mydb.cursor()
+#mycursor = mydb.cursor()
 
 df = pd.read_csv('datausers.csv')
-
+q = pd.read_csv('availableDrivers.csv')
+tempfile = NamedTemporaryFile(mode='w', delete=False)
 app = Flask(__name__)
 
 def executeRules(UserID):
 	global UID
 	UID = UserID
+	#print(UID)
 	
 	#get the properties of the specified user and assign it to variables
 	isSmoking = df[df['UID']== UID].iloc[:,7].values[0]
@@ -61,17 +63,39 @@ def writeToFile(uid,profession,rating,age,profCat,language,genderPref,smoking,mu
 		writer = csv.writer(f)
 		writer.writerow(fields)
 	
-@app.route('/ridematching/kmeans/user', methods=['POST'])
-def getSuitableDriverList():
-	UserID = request.get_json().get('UID') #Final list of drivers
-	return driverList(UserID)
+@app.route('/ridematching/kmeans/<UserID>', methods=['GET'])
+def getSuitableDriverList(UserID):
+	global uid
+	uid = UserID
+	#UserID = request.get_json().get('UID') #Final list of drivers
+	#return uid
+	print(uid)
+	
+	return driverList(uid)
+
+	
+@app.route('/update/<UserID>/<Rating>', methods=['GET'])
+def updateDataSet(UserID, Rating):
+	global uid
+	global rating
+	uid = UserID
+	rating = Rating
+	print(uid)
+	print(rating)
+	df.loc[df['UID'] == uid, 'Rating'] = rating
+	
+	df.to_csv('datausers.csv', index=False);
+	#print(df)
+		
+	return 'Updated'
 
 	
 @app.route('/available', methods=['POST'])
 def writeAvailableDriversToFile(): #  Filtering available drivers(2)
+
 	dIDList= list()
 	#df = pd.read_csv('test.csv')
-	#print(request.get_json().get('uid')[0].get('UID'))
+	print(len(request.get_json().get('uid')))
 	for x in range(0, len(request.get_json().get('uid'))): 
 		dIDList.append(request.get_json().get('uid')[x].get('UID'))
 		#print(dIDList)
@@ -83,32 +107,35 @@ def writeAvailableDriversToFile(): #  Filtering available drivers(2)
 		
 		df.loc[(df['UID'] == dIDList[y])].to_csv('availableDrivers.csv',index=False, mode='a', header=False);	
 
-	return 'Data written to the file'
+	addedList = list()
+	addedList.append("Added")
+	return jsonify(FILE = addedList)
 	
 #Defining rules for the filteration
 def rules(smokingFlag, musicFlag, motionFlag, quietnessFlag, genderFlag):
-	q = pd.read_csv('availableDrivers.csv')
+	
 	q.loc[(df['Smoking'] == smokingFlag) & (q['Music_Lover'] == musicFlag) & (q['Motion_Sickness'] == motionFlag) & (q['Gender_Preference'] == genderFlag) 
 	& (q['Like_Quietness'] == quietnessFlag)].to_csv('newUsers.csv', index=False);
-	os.remove('availableDrivers.csv')
+	#os.remove('availableDrivers.csv')
 	
 def driverList(UserID):
+	print(UserID)
 	executeRules(UserID)
 	#UID = 650444020925
 	dataset = pd.read_csv('newUsers.csv')
-	os.remove('newUsers.csv')
+	#os.remove('newUsers.csv')
 	X = dataset.iloc[:,[3,4]].values # read columns Age-x axis and Profession-y axis
 
 	# Using the elbow method to find the optimal number of clusters
 	from sklearn.cluster import KMeans
 	wcss =[]
-	for i in range (1,11):
-		kmeans = KMeans(n_clusters = i, init = 'k-means++', max_iter =200, n_init = 10, random_state = 0)
+	for i in range (1,3):
+		kmeans = KMeans(n_clusters = i, init = 'k-means++', max_iter =300, n_init = 5, random_state = 0)
 		kmeans.fit(X)
 		wcss.append(kmeans.inertia_) #Within Cluster Sum of Squares
 
 	# Applying KMeans to the dataset with the optimal number of cluster
-	kmeans=KMeans(n_clusters = 3, init = 'k-means++', max_iter = 200, n_init = 10, random_state = 0)
+	kmeans=KMeans(n_clusters = 2, init = 'k-means++', max_iter = 300, n_init = 5, random_state = 0)
 	Y_Kmeans = kmeans.fit_predict(X)
 
 
@@ -158,14 +185,16 @@ def driverList(UserID):
 		formattedUIDList.append(uid[0]) 
 		#print(uid)
 
+	#f.open("availableDrivers.csv", "w+")
+	#f.close()
 	
 	#filteredList = [1,2,3,4,5]
 
 	#dataset = pd.DataFrame(filteredList)
 	#dataset.to_csv('selectedDrivers.csv')
-	
+	#print(formattedUIDList)
 	#return the final driver list in JSON
-	return jsonify(UID = formattedUIDList)
+	return jsonify(formattedUIDList)
 
 	
 if __name__ == '__main__':

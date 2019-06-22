@@ -1,0 +1,9 @@
+UID,Profession,Rating,Age,Profession_Category,Language_Spoken,Gender_Preference,Smoking,Music_Lover,Motion_Sickness,Like_Quietness,Cluster
+U1558711443508,Security Officer,4.9,23,15,Sinhala,No,Yes,Yes,Yes,Yes,0
+U1558711443511,Driver,5.0,29,15,Sinhala,No,Yes,Yes,Yes,Yes,0
+U1558711443502,Driver,5.0,32,25,Sinhala,No,Yes,Yes,Yes,Yes,1
+U1558711443506,Driver,3.6,23,25,Sinhala,No,Yes,Yes,Yes,Yes,1
+U1558711443507,Clerk,2.6,31,33,Sinhala,No,Yes,Yes,Yes,Yes,1
+U1558711443512,Driver,2.2,31,25,Sinhala,No,Yes,Yes,Yes,Yes,1
+U1558711443513,Clerk,3.2,25,30,Sinhala,No,Yes,Yes,Yes,Yes,1
+U1558711443514,Driver,2.3,25,27,Sinhala,No,Yes,Yes,Yes,Yes,1

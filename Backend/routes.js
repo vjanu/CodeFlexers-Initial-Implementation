@@ -8,6 +8,11 @@ const vehicleroute = require('./controllers/vehicle.controller');
 const telephoneroute = require('./controllers/telephone.controller');
 const ratingroute = require('./controllers/rating.controller');
 const roadcauseroute = require('./controllers/roadcause.controller');
+const tripsummaryroute = require('./controllers/trip_summary.controller');
+const offerrideroute = require('./controllers/offerride.controller');
+const availableDriversroute = require('./controllers/availableDriverList.controller');
+const map = require('./controllers/map.controller');
+
 
 
 routes.use('/login',loginroute);
@@ -18,5 +23,10 @@ routes.use('/vehicle',vehicleroute);
 routes.use('/telephone',telephoneroute);
 routes.use('/ratings',ratingroute);
 routes.use('/roadcause',roadcauseroute);
+routes.use('/tripsummary',tripsummaryroute);
+routes.use('/addofferride',offerrideroute);
+routes.use('/available',availableDriversroute);
+routes.use('/map',map);
+
 
 module.exports = routes;
