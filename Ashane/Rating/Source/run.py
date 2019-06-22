@@ -106,11 +106,14 @@ def main(sentence):
         print ("positive")
     print (resultRating)
     
-    return jsonify(
-        InputSentiment = sentence,
-        ResultRating = resultRating,
-        Type = sentimentType
-    )    
+    data =[{'InputSentiment' : sentence ,'ResultRating' : resultRating,'Type':sentimentType}]
+    
+    return jsonify(data), 200
+    #return jsonify(
+   #     InputSentiment = sentence,
+  #      ResultRating = resultRating,
+   #     Type = sentimentType
+  #  )    
     
 app.run(debug=True,host="0.0.0.0",port=8090)
 #if (__name__ == __main__):

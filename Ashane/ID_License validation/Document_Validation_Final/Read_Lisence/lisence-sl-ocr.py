@@ -319,10 +319,14 @@ def main(location):
         Description="Unexpected error,Unable to process the image,Please check the path" 
     print("------ Done -------")
     
+    data =[{'ExtractedNIC' : ExtractedNIC ,'Expiration' : Expiration,'Description':Description}]
+    
+    return jsonify(data), 200
+    
     #return as a json object
-    return jsonify(
-    ExtractedNIC = ExtractedNIC,
-    Expiration = Expiration,
-    Description = Description
-    )  
-app.run(debug=True,host="0.0.0.0",port=81)
+   # return jsonify(
+   # ExtractedNIC = ExtractedNIC,
+   # Expiration = Expiration,
+   # Description = Description
+    #)  
+app.run(debug=True,host="0.0.0.0",port=8088)

@@ -82,7 +82,7 @@ def get_stringOldIdCard(img_path):
     nic = nic.replace(" ", "")
     nic = nic.replace("v","0")
     nic = nic[-9:]
-    print(resultArray)
+    #print(resultArray)
     if(len(nic) == 9 ):
         print("Old NIC contains 9 digits only --> Converted to 12 digit format")
         nic = '19' + nic[:5]+'0'+nic[5:]
@@ -115,10 +115,14 @@ def main(location):
         Description="Unexpected error,Unable to process the image,Please check the path" 
     print("------ Done -------")
     
+    data =[{'ExtractedNIC' : ExtractedNIC ,'Description':Description}]
+    
+    return jsonify(data), 200
+    
     #return as a json object
-    return jsonify(
-    ExtractedNIC = ExtractedNIC,
-    Description = Description
-    )   
+    #return jsonify(
+    #ExtractedNIC = ExtractedNIC,
+    #Description = Description
+    #)   
         
-app.run(debug=True,host="0.0.0.0",port=80)
+app.run(debug=True,host="0.0.0.0",port=8089)
