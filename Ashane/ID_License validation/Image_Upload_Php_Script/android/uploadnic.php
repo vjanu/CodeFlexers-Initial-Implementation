@@ -27,6 +27,8 @@
 		//$query = mysqli_query($con, "INSERT INTO volley_upload (photo,name) VALUES ('$actualpath','$name')");
 		
 		//if ($query){
+
+			chmod ($path, 0777);
 			file_put_contents($path,base64_decode($image));
 			
 			$response = new emp();

@@ -21,7 +21,8 @@
 		//$actualpath = "http://192.168.10.177/android/upload_image/$path";
 		//$actualpath = "localhost:8080/android/upload_image/$path";
 		//$actualpath = "localhost:8080/android/$path";
-	
+
+			chmod ($path, 0777);
 			file_put_contents($path,base64_decode($image));
 			
 			$response = new emp();
