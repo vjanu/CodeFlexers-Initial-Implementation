@@ -17,7 +17,7 @@ exports.getSpecificDriverDetails = function (req,res) { //time
 // console.log("qqq: "+z);
 // console.log("goo: "+queryData1);
 
-    var sql="SELECT u.FullName,u.img,u.UserID, v.Brand, r.AverageRating, o.OID, o.Source, o.Destination, o.StartTime, o.WaitingTime FROM users u,vehicle v, rating_personal r, offerride o where u.UserID = v.UserID and u.UserID = r.UserID and u.UserID = o.UserID and u.UserID in("+y+")" 
+    var sql="SELECT u.FullName,u.img,u.UserID,u.Token, v.Model, r.AverageRating, o.OID, o.Source, o.Destination, o.StartTime, o.WaitingTime FROM users u,vehicle v, rating_personal r, offerride o where u.UserID = v.UserID and u.UserID = r.UserID and u.UserID = o.UserID and u.UserID in("+y+")" 
     var query= db.query(sql,(err,rows,results)=>{
         if(!err){
             res.send(rows);
