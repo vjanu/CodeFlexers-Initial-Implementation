@@ -167,3 +167,23 @@ exports.addRequestTrip = function (req,res) {
        console.log(err);
   })
 };
+
+
+//Driver Accept the Driver 
+exports.AcceptRideRequest = function (req,res) {
+  var tripId = "'" + req.params.tripId + "'";
+  var passengerId = "'" + req.params.passengerId + "'";
+  var driverId = "'" + req.params.driverId + "'";
+  var rbody = req.body;
+  console.log(tripId)
+  console.log(passengerId)
+  console.log(driverId)
+  var sql="Update current_passengers SET trip_status=0 Where tripId ="+tripId+" and passengerId ="+ passengerId +" and driverId =" +driverId
+  db.query(sql,[rbody.trip_status], function (err,rows, result) {
+      if(!err){
+        res.send(rows);
+      }
+      else
+       console.log(err);
+  })
+};
