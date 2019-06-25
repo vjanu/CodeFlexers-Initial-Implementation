@@ -138,11 +138,11 @@ exports.addVehicleRating = function (req,res) {
 exports.reportDrivers = function (req,res) {
    var rbody = req.body;    
    var post = {
-      RID:rbody.RID,
+      // RID:rbody.RID,
       PUID:rbody.PUID, //rated passenger ID
       DUID:rbody.DUID  //driver ID
    };
-   var sql='INSERT INTO reported_driversHide SET ?'
+   var sql='INSERT INTO reported_drivers SET ?'
    var query = db.query(sql,post,(err,rows,results)=>{
        if(!err){
            res.send(rows);
