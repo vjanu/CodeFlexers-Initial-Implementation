@@ -2,12 +2,12 @@ var db = require('../db.schema');
 
 //model to get summary details
 exports.getTripSummaryDetails = function (req,res) {
-    var oid = "'" + req.params.oid + "'";
-    var sql="SELECT StartDate,StartTime,WaitingTime FROM offerride WHERE OID=" + oid
+    var tripId = "'" + req.params.tripId + "'";
+    var sql="SELECT StartDate,StartTime,WaitingTime FROM offerride WHERE OID=" + tripId
     var query= db.query(sql,(err,rows,results)=>{
         if(!err){
             res.send(rows[0]);
-         //    console.log(rows);
+             console.log(rows);
         }
         else
          console.log(err);

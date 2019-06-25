@@ -3,7 +3,7 @@ const router = express.Router();
 const tripSummaryModel=require('../models/trip_summary.model');
 
 
-router.get('/:tripId',tripSummaryModel.getTripSummaryDetails);
+router.get('/get/:tripId',tripSummaryModel.getTripSummaryDetails);
 router.get('/currentPassenger/:tripId',tripSummaryModel.getCurrentPassenger);
 
 

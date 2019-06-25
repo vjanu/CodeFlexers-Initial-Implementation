@@ -2,7 +2,7 @@ var db = require('../db.schema');
 
 //model to get all Current Passenger Details
 exports.getAllCurrentUsers = function (req,res) {
-   var sql="SELECT  cp.tripId,cp.passengerId,cp.driverId,cp.source,cp.destination,ts.description,u.UserID,u.img,u.Token,u.FullName FROM current_passengers cp , tripStatus ts, users u where cp.trip_status = ts.statusId and cp.passengerId = u.UserID"
+   var sql="SELECT  cp.tripId,cp.passengerId,cp.driverId,cp.source,cp.destination,ts.description,u.UserID,u.Token,u.FullName FROM current_passengers cp , tripStatus ts, users u where cp.trip_status = ts.statusId and cp.passengerId = u.UserID"
    var query= db.query(sql,(err,rows,results)=>{
        if(!err){
         res.end(JSON.stringify({'currentUsers':rows}));
@@ -140,4 +140,30 @@ exports.UpdateFareCalculationDropOffUser = function (req,res) {
        else
         console.log(err);
    })
+};
+
+
+//model to add Trip Request 
+exports.addRequestTrip = function (req,res) {
+  var rbody = req.body;       
+  var post = {
+    tripId:rbody.tripId,
+    passengerId:rbody.passengerId,
+    driverId:rbody.driverId, 
+    source:rbody.source,
+    destination:rbody.destination,
+    trip_status:"4",
+    startMileage:"0",
+    price:"0",
+    
+  };
+  var sql='INSERT INTO current_passengers SET ?'
+  var query = db.query(sql,post,(err,rows,results)=>{
+      if(!err){
+          res.send(rows);
+          console.log(rows);
+      }
+      else
+       console.log(err);
+  })
 };
