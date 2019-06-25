@@ -51,7 +51,8 @@ def get_stringNewLiscence(img_path):
     result = result.replace('(', " ")
     # Remove template file
     # os.remove(temp)
-
+    
+    print(result)
     resultArray = result.split('\n')
     tempNIC = "Not Found"
     nic = "Not Found"
@@ -71,11 +72,13 @@ def get_stringNewLiscence(img_path):
                     nic = nicContainingLine.split(" ")[1]
             #To identify expiration dates
             if("4b." in x):
-                lisenceExpiration = x.split("4b.")[1]          
+                lisenceExpiration = x.split("4b.")[1]       
             if (len(lisenceExpiration) < 10):
                 if("b." in x):
                     x = x.replace(" ", "")
                     lisenceExpiration = x.split("b.")[1]
+                elif("4b" in x):
+                    lisenceExpiration = x.split("4b")[1]
                 elif("40." in x):
                     lisenceExpiration = x.split("40.")[1]
         except:
@@ -96,22 +99,18 @@ def get_stringNewLiscence(img_path):
                     #print(nextresult2.index(y))
                     listIndex=nextresult2.index(y)
                     tempNIC=nextresult2[listIndex-1]
-                    #re.split("[^1-9]*",tempNIC)
-                    #tempNIC=int("".join(filter(str.isdigit, tempNIC)))
+                
                     tempNIC = re.sub(r"\D+", "", tempNIC)
                     tempNIC = re.sub(r"\W+", "", tempNIC, flags=re.I)
          
                     splitLetters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ|"
                     for char in splitLetters:  
                         tempNIC = tempNIC.replace(char,'')  
-                    #re.sub("A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z", "", tempNIC)
-                    #re.split('A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z', tempNIC)
-                    #print("ssssssssssssssssssssssssssssssssssss",tempNIC)
+        
                     if((listIndex > 0) and ((len(tempNIC) == 9) or len(tempNIC) == 12)):
                         nic = tempNIC
                     elif((listIndex == 0) and ((len(tempNIC) == 9) or len(tempNIC) == 12)):
                         nic = tempNIC
-                    #print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
                     
                 elif("v" in y):
                     #print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
@@ -139,9 +138,15 @@ def get_stringNewLiscence(img_path):
     
     if(lisenceExpiration != "Not Found"):
         global Expiration
+        # lisenceExpiration = lisenceExpiration.replace(" ", "") 
+        # lisenceExpiration = lisenceExpiration.replace(":", "")
+        lisenceExpiration = re.sub(r"[^0-9.]+", "", lisenceExpiration) 
         Expiration=lisenceExpiration
     print(resultArray) 
     if(nic == "Not Found"):
+        print("[LISENCE]NIC not found --> Resizing the image")
+        nic = get_stringNewLiscenceResized(img_path)
+    elif(len(nic) < 9):
         print("[LISENCE]NIC not found --> Resizing the image")
         nic = get_stringNewLiscenceResized(img_path)
     
@@ -212,6 +217,8 @@ def get_stringNewLiscenceResized(img_path):
                 if("b." in x):
                     x = x.replace(" ", "")
                     lisenceExpiration = x.split("b.")[1]
+                elif("4b" in x):
+                    lisenceExpiration = x.split("4b")[1]
                 elif("40." in x):
                     lisenceExpiration = x.split("40.")[1]
         except:
@@ -232,14 +239,14 @@ def get_stringNewLiscenceResized(img_path):
                     #print(nextresult2.index(y))
                     listIndex=nextresult2.index(y)
                     tempNIC=nextresult2[listIndex-1]
-                    #re.split("[^1-9]*",tempNIC)
+                    
                     tempNIC = re.sub(r"\D+", "", tempNIC)
                     tempNIC = re.sub(r"\W+", "", tempNIC, flags=re.I)
          
                     splitLetters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ|"
                     for char in splitLetters:  
                         tempNIC = tempNIC.replace(char,'')   
-                    #print("ssssssssssssssssssssssssssssssssssss",tempNIC)
+                    
                     if((listIndex > 0) and ((len(tempNIC) == 9) or len(tempNIC) == 12)):
                         nic = tempNIC
                     elif((listIndex == 0) and ((len(tempNIC) == 9) or len(tempNIC) == 12)):
@@ -257,22 +264,20 @@ def get_stringNewLiscenceResized(img_path):
                     splitLetters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ|"
                     for char in splitLetters:  
                         tempNIC = tempNIC.replace(char,'')   
-                    #re.sub("A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z", "", tempNIC)
-                    #re.split('A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z', tempNIC)
-                    #print("ssssssssssssssssssssssssssssssssssss",tempNIC)
+                    
                     if((listIndex > 0) and ((len(tempNIC) == 9) or len(tempNIC) == 12)):
                         nic = tempNIC
                     elif((listIndex == 0) and ((len(tempNIC) == 9) or len(tempNIC) == 12)):
                         nic = tempNIC                    
                     #print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-            #print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-            #print(nextresult2)
-            #print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
     
     nic = nic.replace('.', "")              
     resultArray = [nic,lisenceExpiration]
     if(lisenceExpiration != "Not Found"):
         global Expiration
+        # lisenceExpiration = lisenceExpiration.replace(" ", "")
+        # lisenceExpiration = lisenceExpiration.replace(":", "")  
+        lisenceExpiration = re.sub(r"[^0-9.]+", "", lisenceExpiration)
         Expiration=lisenceExpiration
     if(len(nic) == 9):
         print("[LISENCE]NIC contains 9 digits only --> Converted to 12 digit format")
@@ -313,7 +318,8 @@ def main(location):
             ExtractedNIC="null"
             Description="Unable to recognize human faces" 
         print("Expiration",Expiration) 
-    except:
+    except Exception as e:
+        print(e)
         print("Exception occured in lisence-sl-ocr.py")
         ExtractedNIC="null"
         Description="Unexpected error,Unable to process the image,Please check the path" 
@@ -323,10 +329,4 @@ def main(location):
     
     return jsonify(data), 200
     
-    #return as a json object
-   # return jsonify(
-   # ExtractedNIC = ExtractedNIC,
-   # Expiration = Expiration,
-   # Description = Description
-    #)  
 app.run(debug=False,host="0.0.0.0",port=8088)
