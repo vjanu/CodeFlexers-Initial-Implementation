@@ -20,7 +20,7 @@ exports.getSpecificVehicle = function (req,res) {
     var query= db.query(sql,(err,rows,results)=>{
         if(!err){
             res.send(rows[0]);
-         //    console.log(rows);
+             console.log(rows[0]);
         }
         else
          console.log(err);

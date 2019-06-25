@@ -13,6 +13,9 @@ from sklearn.linear_model import LinearRegression
 app = Flask(__name__)
 
 
+@app.route('/update/', methods=['GET'])
+def zz():
+	return 'Updated'
 
 @app.route('/fuel/<manYear>/<regYear>/<cylinders>/<fuel>/<capacity>/<kW>/<mileage>', methods=['GET'])
 def fuelPrediction(manYear,regYear,cylinders,fuel ,capacity,kW,mileage) :
@@ -63,6 +66,6 @@ def fuelPrediction(manYear,regYear,cylinders,fuel ,capacity,kW,mileage) :
     return jsonify(fuelPrediction=finalResult)
 
 
-app.run(debug=True,host="0.0.0.0",port=96)
+app.run(debug=True,host="192.168.8.100",port=96)
 #if __name__ == '__main__':
 #    app.run(debug=True)

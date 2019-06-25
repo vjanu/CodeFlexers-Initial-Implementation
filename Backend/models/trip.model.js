@@ -178,7 +178,7 @@ exports.AcceptRideRequest = function (req,res) {
   console.log(tripId)
   console.log(passengerId)
   console.log(driverId)
-  var sql="Update current_passengers SET trip_status=0 Where tripId ="+tripId+" and passengerId ="+ passengerId +" and driverId =" +driverId
+  var sql="Update current_passengers SET trip_status=? Where tripId ="+tripId+" and passengerId ="+ passengerId +" and driverId =" +driverId
   db.query(sql,[rbody.trip_status], function (err,rows, result) {
       if(!err){
         res.send(rows);
