@@ -12,6 +12,7 @@ const tripsummaryroute = require('./controllers/trip_summary.controller');
 const offerrideroute = require('./controllers/offerride.controller');
 const availableDriversroute = require('./controllers/availableDriverList.controller');
 const triproute = require('./controllers/trip.controller');
+const maproute=require('./controllers/map.controller')
 
 
 
@@ -27,5 +28,6 @@ routes.use('/tripsummary',tripsummaryroute);
 routes.use('/addofferride',offerrideroute);
 routes.use('/available',availableDriversroute);
 routes.use('/trip',triproute);
+routes.use('/map',maproute);
 
 module.exports = routes;
