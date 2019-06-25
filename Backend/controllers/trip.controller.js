@@ -12,4 +12,6 @@ router.put('/update/fare/:tripId/:passengerId/:driverId',tripModel.UpdateFareCal
 router.put('/update/fare/dropoff/:tripId/:passengerId/:driverId',tripModel.UpdateFareCalculationDropOffUser);
 router.get('/update/fare/dropoff/:tripId/:passengerId/:driverId',tripModel.getDropOffPassengersDetails);
 
+router.post('/newRequest',tripModel.addRequestTrip);
+
 module.exports=router;
