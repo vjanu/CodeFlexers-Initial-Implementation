@@ -3,7 +3,7 @@ const router = express.Router();
 const tripModel=require('../models/trip.model');
 
 
-router.get('/',tripModel.getAllCurrentUsers);
+router.get('/:tripId',tripModel.getAllCurrentUsers);
 router.put('/update/startRide/:tripId/:passengerId/:driverId',tripModel.UpdateStatus_Start);
 router.put('/update/endRide/:tripId/:passengerId/:driverId',tripModel.UpdateStatus_End);
 router.get('/specific/:tripId/:passengerId/:driverId',tripModel.getPassengerStartMileage);
@@ -14,4 +14,6 @@ router.get('/update/fare/dropoff/:tripId/:passengerId/:driverId',tripModel.getDr
 
 router.post('/newRequest',tripModel.addRequestTrip);
 router.put('/accept/:tripId/:passengerId/:driverId',tripModel.AcceptRideRequest);
+router.get('/price/:tripId/:passengerId/:driverId',tripModel.getPassengerPrice);
+
 module.exports=router;
