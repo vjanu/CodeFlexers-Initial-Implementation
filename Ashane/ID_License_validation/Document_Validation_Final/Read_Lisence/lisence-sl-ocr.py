@@ -295,7 +295,7 @@ def main(location):
     filename = location   
     print('--- Start recognize text from lisence ---')
     try:  
-        if(fd.checkFaces(src_path + filename) >= 1): 
+        if(int(fd.checkFaces(src_path + filename)) >= 1): 
             intensity.intensityMain(src_path + filename)
             cc.colorChange(src_path + filename)
             result1 = get_stringNewLiscence(src_path +filename)
