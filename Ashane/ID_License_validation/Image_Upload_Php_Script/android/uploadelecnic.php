@@ -1,5 +1,4 @@
 <?php
-	
 	class emp{}
 	
 	$image = $_POST['image'];
@@ -12,9 +11,9 @@
 		die(json_encode($response));
 	} else {
 		$random = random_word(20);
-		
+			
 		$path = "file:///C:/Users/Ashane/Desktop/Read_Old_NIC/tes-img/".$name.".png";
-		
+	
 			chmod ($path, 0777);
 			file_put_contents($path,base64_decode($image));
 			
@@ -22,6 +21,7 @@
 			$response->success = 1;
 			$response->message = "Successfully Uploaded";
 			die(json_encode($response));
+		
 	}	
 	
 	// random string 
