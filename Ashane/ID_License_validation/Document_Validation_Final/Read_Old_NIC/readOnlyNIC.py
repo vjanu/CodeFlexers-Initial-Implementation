@@ -1,5 +1,6 @@
 from flask import jsonify,Flask
 import re
+import os
 import cv2
 import numpy as np
 import pytesseract
@@ -12,6 +13,7 @@ import face_detect_nic as fd
 # Path of working folder on Disk
 src_path = "tes-img/"
 filename = ""
+imgname = ""
 
 def get_stringOldIdCard2(img_path):
     # Read image with opencv
@@ -37,7 +39,7 @@ def get_stringOldIdCard2(img_path):
     img = cv2.erode(img, kernel, iterations=1)
 
     # Write image after removed noise
-    cv2.imwrite(src_path + "removed_noise.png", img)
+    cv2.imwrite(src_path +imgname+ "removed_noise.png", img)
 
     # Apply threshold to get image with only black and white
     blur = cv2.GaussianBlur(img, (5, 5), 0)
@@ -45,10 +47,10 @@ def get_stringOldIdCard2(img_path):
     
 
     # Write the image after apply opencv to do some ...
-    cv2.imwrite(src_path + "thres.png", img)
+    cv2.imwrite(src_path +imgname+ "thres.png", img)
 
     # Recognize text with tesseract for python
-    result = pytesseract.image_to_string(Image.open(src_path + "thres.png"),config="-c tessedit_char_whitelist=01234567890IilVv -psm 6")
+    result = pytesseract.image_to_string(Image.open(src_path +imgname+ "thres.png"),config="-c tessedit_char_whitelist=01234567890IilVv -psm 6")
     
     # Remove template file
     # os.remove(temp)
@@ -123,7 +125,7 @@ def get_stringOldIdCard(img_path):
     img = cv2.erode(img, kernel, iterations=1)
 
     # Write image after removed noise
-    cv2.imwrite(src_path + "removed_noise.png", img)
+    cv2.imwrite(src_path +imgname+ "removed_noise.png", img)
 
     # Apply threshold to get image with only black and white
     blur = cv2.GaussianBlur(img, (5, 5), 0)
@@ -131,10 +133,10 @@ def get_stringOldIdCard(img_path):
     
 
     # Write the image after apply opencv to do some ...
-    cv2.imwrite(src_path + "thres.png", img)
+    cv2.imwrite(src_path +imgname+ "thres.png", img)
 
     # Recognize text with tesseract for python
-    result = pytesseract.image_to_string(Image.open(src_path + "thres.png"),config="-c tessedit_char_whitelist=01234567890IilVv -psm 6")
+    result = pytesseract.image_to_string(Image.open(src_path +imgname+ "thres.png"),config="-c tessedit_char_whitelist=01234567890IilVv -psm 6")
     
     # Remove template file
     # os.remove(temp)
@@ -192,33 +194,36 @@ app = Flask(__name__)
 @app.route("/nic/<string:location>")
 def main(location):
     global filename
-    filename = location
+    global imgname
+    filename = location 
+    imgname = location[:-4]
+    print(imgname)
     print('--- Start recognize text from NIC ---')
     try: 
         if(fd.checkFaces(src_path + filename) >= 1):  
-            cc.colorChange(src_path + filename)
-            print(get_stringOldIdCard(src_path + "changedclr1.bmp") )
-            ExtractedNIC = get_stringOldIdCard(src_path + "changedclr1.bmp")
-            if(len(get_stringOldIdCard(src_path + "changedclr1.bmp"))!=12):
-                print(get_stringOldIdCard(src_path + "changedclr.bmp") ) 
-                ExtractedNIC = get_stringOldIdCard(src_path + "changedclr.bmp")   
+            cc.colorChange(src_path + filename)  
+            ExtractedNIC = get_stringOldIdCard(src_path +imgname+ "changedclr1.bmp")
+            print(ExtractedNIC)
+            if(len(get_stringOldIdCard(src_path + imgname+"changedclr1.bmp"))!=12):
+                ExtractedNIC = get_stringOldIdCard(src_path +imgname+ "changedclr.bmp") 
+                print(ExtractedNIC)  
             Description="Processed"
         else:
             ExtractedNIC="null"
             Description="Unable to recognize human faces" 
-    except:
+    except Exception as e:
+        print(e)
         ExtractedNIC="null"
         Description="Unexpected error,Unable to process the image,Please check the path" 
     print("------ Done -------")
     
+    os.remove(src_path +imgname+ "changedclr1.bmp")
+    os.remove(src_path +imgname+ "changedclr.bmp")
+    os.remove(src_path +imgname+ "removed_noise.png")
+    os.remove(src_path +imgname+ "thres.png")
+
     data =[{'ExtractedNIC' : ExtractedNIC ,'Description':Description}]
     
-    return jsonify(data), 200
-    
-    #return as a json object
-    #return jsonify(
-    #ExtractedNIC = ExtractedNIC,
-    #Description = Description
-    #)   
+    return jsonify(data), 200  
         
 app.run(debug=False,host="0.0.0.0",port=8089)
