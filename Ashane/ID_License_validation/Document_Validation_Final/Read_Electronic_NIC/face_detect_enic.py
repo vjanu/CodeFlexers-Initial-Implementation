@@ -2,13 +2,16 @@ import cv2
 import sys
 import imutils
 from PIL import Image
+import time
 
+count = 0
 # Path of working folder on Disk
 #src_path = "tes-img/"
 
 def checkFaces(img_path):
+    global count
     # Get user supplied values
-    count = 0
+    # count = 0
     picture= Image.open(img_path)
     imagePath = img_path
     cascPath = "haarcascade_frontalface_default.xml"    
@@ -34,12 +37,14 @@ def checkFaces(img_path):
 
     print("Found {0} faces!".format(len(faces)))
 
-    if(len(faces)!=1):
+    if(len(faces) < 1):
         print("Please insert a valid image")
         if(count != 3):
             picture.rotate(90, expand=True).save(img_path)
-            checkFaces(img_path)
+            checkFaces(img_path)     
             count=count+1
+        else:
+            return 0
     else:
         print("Image verified")
 
@@ -49,5 +54,5 @@ def checkFaces(img_path):
 
     # cv2.imshow("Faces found", image)
     # cv2.waitKey(0)
-        return len(faces)
+        return int(len(faces))
 

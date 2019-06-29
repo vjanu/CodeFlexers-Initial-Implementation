@@ -9,6 +9,7 @@ from PIL import Image
 from pytesseract import image_to_string
 import colorChange as cc
 import face_detect_enic as fd
+import time
 
 # Path of working folder on Disk
 src_path = "tes-img/"
@@ -101,6 +102,7 @@ def main(location):
     print(imgname)
     print('--- Start recognize text from eNIC ---')
     try: 
+        print(fd.checkFaces(src_path + filename))
         if(int(fd.checkFaces(src_path + filename)) >= 1):
             cc.colorChange(src_path + filename)
             # print(len(get_stringNewIdCard(src_path +filename)) )
@@ -112,6 +114,12 @@ def main(location):
                     # print(get_stringNewIdCard(src_path + "changedclr.bmp") ) 
                     ExtractedNIC = get_stringNewIdCard(src_path +imgname+ "changedclr.bmp")
             Description = "Processed"
+              #remove created images
+            #TODO:REMOVE SOURSE FILE ALSO
+            os.remove(src_path +imgname+ "changedclr1.bmp")
+            os.remove(src_path +imgname+ "changedclr.bmp")
+            os.remove(src_path +imgname+ "removed_noise.png")
+            os.remove(src_path +imgname+ "thres.png")
         else:
             ExtractedNIC = "null"
             Description = "Unable to recognize human faces" 
@@ -120,13 +128,6 @@ def main(location):
         ExtractedNIC = "null"
         Description = "Unexpected error,Unable to process the image,Please check the path" 
     print("------ Done -------")
-
-    #remove created images
-    #TODO:REMOVE SOURSE FILE ALSO
-    os.remove(src_path +imgname+ "changedclr1.bmp")
-    os.remove(src_path +imgname+ "changedclr.bmp")
-    os.remove(src_path +imgname+ "removed_noise.png")
-    os.remove(src_path +imgname+ "thres.png")
 
     data =[{'ExtractedNIC' : ExtractedNIC ,'Description':Description}]
     

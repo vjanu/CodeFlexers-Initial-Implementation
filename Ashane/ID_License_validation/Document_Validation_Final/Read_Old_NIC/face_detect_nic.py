@@ -43,6 +43,6 @@ def checkFaces(img_path):
         cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
     #cv2.imshow("Faces found", image)
-    cv2.waitKey(0)
-    return len(faces)
+    #cv2.waitKey(0)
+    return int(len(faces))
 
