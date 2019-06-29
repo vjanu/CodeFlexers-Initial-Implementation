@@ -6,14 +6,15 @@ exports.addTripData = function(req, res){
     console.log(req);
 
     let rbody = req.body;
-
-    let startlatlong = rbody.source_lat + "," + rbody.source_long;
-    let destinationlatlong = rbody.destination_long + "," + rbody.destination_lat;
+    var SID = "S" + Date.now(); 
 
     var post = {
-        UserID:rbody.userid,
-        StartingLoc: startlatlong,
-        DestinationLoc: destinationlatlong
+        SID: SID,
+        UserID:rbody.UserID,
+        StartingLat: rbody.StartingLat,
+        StartingLong: rbody.StartingLong,
+        DestinationLat: rbody.DestinationLat,
+        DestinationLong: rbody.DestinationLong
     };
 
     console.log(post);

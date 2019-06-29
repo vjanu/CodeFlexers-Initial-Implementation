@@ -16,11 +16,12 @@ exports.getAllVehicle = function (req,res) {
 //model to get specific vehicle
 exports.getSpecificVehicle = function (req,res) {
     var uid = "'" + req.params.uid + "'";
+    console.log(uid)
     var sql="SELECT * FROM vehicle where UserID =" + uid
     var query= db.query(sql,(err,rows,results)=>{
         if(!err){
-            res.send(rows[0]);
-             console.log(rows[0]);
+            res.send(rows);
+             console.log(rows);
         }
         else
          console.log(err);
