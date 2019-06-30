@@ -152,3 +152,17 @@ exports.reportDrivers = function (req,res) {
         console.log(err);
    })
 };
+
+//model to get reported drivers
+exports.getReportedDrivers = function (req,res) {
+    var uid = "'" + req.params.uid + "'";
+    var sql="SELECT * FROM reported_drivers where PUID =" + uid
+    var query= db.query(sql,(err,rows,results)=>{
+        if(!err){
+            res.send(rows);
+         //    console.log(rows);
+        }
+        else
+         console.log(err);
+    })
+ };
