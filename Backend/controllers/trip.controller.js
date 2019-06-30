@@ -16,4 +16,10 @@ router.post('/newRequest',tripModel.addRequestTrip);
 router.put('/accept/:tripId/:passengerId/:driverId',tripModel.AcceptRideRequest);
 router.get('/price/:tripId/:passengerId/:driverId',tripModel.getPassengerPrice);
 
+router.put('/offerRide/start/:tripId',tripModel.UpdateStatus_start_offerRide);
+router.put('/offerRide/end/:tripId',tripModel.UpdateStatus_end_offerRide);
+
+router.post('/migrate/currentPassengers',tripModel.migrateCurrentPassengers);
+router.delete('/delete/currentPassengers/:tripId',tripModel.deleteCurrentPassengers);
+
 module.exports=router;

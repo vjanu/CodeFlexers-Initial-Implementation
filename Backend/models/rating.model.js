@@ -7,8 +7,9 @@ exports.getPersonalRatings = function (req,res) {
    var sql="SELECT * FROM V_PERSONAL_RATING where UID =" + pid //Correct this according to view
    var query= db.query(sql,(err,rows,results)=>{
        if(!err){
-           res.send(rows);
-        //    console.log(rows);
+        //res.end(JSON.stringify({'PRating':rows}));
+        res.send(rows);
+           console.log(rows);
        }
        else
         console.log(err);
@@ -153,6 +154,38 @@ exports.reportDrivers = function (req,res) {
    })
 };
 
+
+
+
+//model to get personal rating from table view response as a JSON Object
+exports.getPersonalRatingsObject = function (req,res) {
+   var pid = "'" + req.params.personid + "'";
+   var sql="SELECT * FROM V_PERSONAL_RATING where UID =" + pid //Correct this according to view
+   var query= db.query(sql,(err,rows,results)=>{
+       if(!err){
+       // res.end(JSON.stringify({'PRating':rows}));
+        res.send(rows[0]);
+           console.log(rows);
+       }
+       else
+        console.log(err);
+   })
+};
+
+//model to get vehicle rating from table view response as a JSON Object
+exports.getvehicleRatingsObject = function (req,res) {
+   var vid = "'" + req.params.vehicleid + "'";
+   var sql="SELECT * FROM V_VEHICLE_RATING where vehicleID =" + vid
+   var query= db.query(sql,(err,rows,results)=>{
+       if(!err){
+           res.send(rows[0]);
+            console.log(rows);
+       }
+       else
+        console.log(err);
+   })
+};
+
 //model to get reported drivers
 exports.getReportedDrivers = function (req,res) {
     var uid = "'" + req.params.uid + "'";
@@ -166,3 +199,4 @@ exports.getReportedDrivers = function (req,res) {
          console.log(err);
     })
  };
+
