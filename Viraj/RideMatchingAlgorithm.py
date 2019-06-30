@@ -190,8 +190,8 @@ def driverList(UserID):
 
 	f = open("availableDrivers.csv", "w+")
 	f.close()
-	os.remove("newUsers.csv")
-	os.remove("final.csv")
+	#os.remove("newUsers.csv")
+	#os.remove("final.csv")
 	#filteredList = [1,2,3,4,5]
 
 	#dataset = pd.DataFrame(filteredList)
