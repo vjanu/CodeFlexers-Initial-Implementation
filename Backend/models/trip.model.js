@@ -1,11 +1,13 @@
 var db = require('../db.schema');
 
 //model to get all Current Passenger Details
+
+//Note:add cp.price
 exports.getAllCurrentUsers = function (req,res) {
   var tripId = "'" + req.params.tripId + "'";
   console.log(tripId)
   var tripId = "'" + req.params.tripId + "'";
-   var sql="SELECT  cp.tripId,cp.passengerId,cp.driverId,cp.source,cp.destination,cp.trip_status,u.UserID,u.Token,u.FullName FROM current_passengers cp ,  users u where  cp.passengerId = u.UserID and cp.tripId = "+tripId
+   var sql="SELECT  cp.tripId,cp.passengerId,cp.driverId,cp.source,cp.destination,cp.trip_status,cp.price,u.UserID,u.Token,u.FullName FROM current_passengers cp ,  users u where  cp.passengerId = u.UserID and cp.tripId = "+tripId
    var query= db.query(sql,(err,rows,results)=>{
        if(!err){
         res.end(JSON.stringify({'currentUsers':rows}));
@@ -104,7 +106,7 @@ exports.UpdateStatus_End = function (req,res) {
    var query= db.query(sql,(err,rows,results)=>{
        if(!err){
            res.send(rows);
-           console.log("getAllCurrentPassengersDetails" + rows[0]);
+           console.log("getAllCurrentPassengersDetails" + rows);
        }
        else
         console.log(err);
@@ -210,6 +212,77 @@ exports.AcceptRideRequest = function (req,res) {
   db.query(sql,[rbody.trip_status], function (err,rows, result) {
       if(!err){
         res.send(rows);
+      }
+      else
+       console.log(err);
+  })
+};
+
+
+//to update the offride status when driver start the trip
+exports.UpdateStatus_start_offerRide = function (req,res) {
+  var tripId = "'" + req.params.tripId + "'";
+  var rbody = req.body;
+  console.log(tripId)
+  var sql="Update offerride SET tripStatus = ? Where OID ="+tripId
+  db.query(sql,[rbody.tripStatus], function (err,rows, result) {
+      if(!err){
+        res.send(rows);
+      }
+      else
+       console.log(err);
+  })
+};
+
+//to update the offride status when driver End the trip
+exports.UpdateStatus_end_offerRide = function (req,res) {
+  var tripId = "'" + req.params.tripId + "'";
+  var rbody = req.body;
+  console.log(tripId)
+  var sql="Update offerride SET tripStatus = ? Where OID ="+tripId
+  db.query(sql,[rbody.tripStatus], function (err,rows, result) {
+      if(!err){
+        res.send(rows);
+      }
+      else
+       console.log(err);
+  })
+};
+
+
+//model to Current Passenger Details move to the Trip History Table
+exports.migrateCurrentPassengers = function (req,res) {
+  var rbody = req.body;       
+  var post = {
+    tripId:rbody.tripId,
+    passengerId:rbody.passengerId,
+    driverId:rbody.driverId, 
+    source:rbody.source,
+    destination:rbody.destination,
+    trip_status:rbody.status,
+    fare:rbody.price,
+    
+  };
+  var sql='INSERT INTO trip_history SET ?'
+  var query = db.query(sql,post,(err,rows,results)=>{
+      if(!err){
+          res.send(rows);
+          console.log(rows);
+      }
+      else
+       console.log(err);
+  })
+};
+
+
+ //model to delete current passengers
+ exports.deleteCurrentPassengers = function (req,res) {
+  var tripId = "'" + req.params.tripId + "'";
+  var sql="DELETE FROM current_passengers WHERE tripId=" + tripId
+  var query= db.query(sql,(err,rows,results)=>{
+      if(!err){
+          res.send(rows);
+           console.log(rows);
       }
       else
        console.log(err);

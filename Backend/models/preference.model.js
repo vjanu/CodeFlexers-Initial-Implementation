@@ -19,7 +19,7 @@ exports.getSpecificPreference = function (req,res) {
     var sql="SELECT * FROM preference where UserID =" + uid
     var query= db.query(sql,(err,rows,results)=>{
         if(!err){
-            res.send(rows);
+            res.send(rows[0]);
          //    console.log(rows);
         }
         else

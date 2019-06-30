@@ -11,4 +11,7 @@ const ratingModel = require('../models/rating.model');
  router.post('/vehicle-rating',ratingModel.addVehicleRating);
  router.post('/reportDrivers',ratingModel.reportDrivers);
 
+ router.get('/personalsObject/:personid',ratingModel.getPersonalRatingsObject);
+ router.get('/vehiclesObject/:vehicleid',ratingModel.getvehicleRatingsObject);
+
 module.exports=router;
