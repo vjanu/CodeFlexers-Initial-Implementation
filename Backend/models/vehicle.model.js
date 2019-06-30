@@ -28,6 +28,20 @@ exports.getSpecificVehicle = function (req,res) {
     })
  };
 
+//model to get specific vehicle
+exports.getVehicleIDbyUser = function (req,res) {
+    var uid = "'" + req.params.uid + "'";
+    var sql="SELECT VehicleID,UserID FROM vehicle where UserID =" + uid
+    var query= db.query(sql,(err,rows,results)=>{
+        if(!err){
+            res.send(rows);
+         //    console.log(rows);
+        }
+        else
+         console.log(err);
+    })
+ };
+
 //model to add vehicle
 exports.addVehicle = function (req,res) {
     var rbody = req.body;    
