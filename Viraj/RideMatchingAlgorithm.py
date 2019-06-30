@@ -23,7 +23,8 @@ from tempfile import NamedTemporaryFile
 #mycursor = mydb.cursor()
 
 df = pd.read_csv('datausers.csv')
-q = pd.read_csv('availableDrivers.csv')
+#q = pd.read_csv('availableDrivers.csv')
+
 tempfile = NamedTemporaryFile(mode='w', delete=False)
 app = Flask(__name__)
 
@@ -92,7 +93,7 @@ def updateDataSet(UserID, Rating):
 	
 @app.route('/available', methods=['POST'])
 def writeAvailableDriversToFile(): #  Filtering available drivers(2)
-
+	#q = pd.read_csv('availableDrivers.csv')
 	dIDList= list()
 	#df = pd.read_csv('test.csv')
 	print(len(request.get_json().get('uid')))
@@ -113,29 +114,29 @@ def writeAvailableDriversToFile(): #  Filtering available drivers(2)
 	
 #Defining rules for the filteration
 def rules(smokingFlag, musicFlag, motionFlag, quietnessFlag, genderFlag):
-	
+	q = pd.read_csv('availableDrivers.csv')
 	q.loc[(df['Smoking'] == smokingFlag) & (q['Music_Lover'] == musicFlag) & (q['Motion_Sickness'] == motionFlag) & (q['Gender_Preference'] == genderFlag) 
 	& (q['Like_Quietness'] == quietnessFlag)].to_csv('newUsers.csv', index=False);
-	#os.remove('availableDrivers.csv')
+	
 	
 def driverList(UserID):
 	print(UserID)
 	executeRules(UserID)
 	#UID = 650444020925
 	dataset = pd.read_csv('newUsers.csv')
-	#os.remove('newUsers.csv')
+	
 	X = dataset.iloc[:,[3,4]].values # read columns Age-x axis and Profession-y axis
 
 	# Using the elbow method to find the optimal number of clusters
 	from sklearn.cluster import KMeans
 	wcss =[]
-	for i in range (1,3):
-		kmeans = KMeans(n_clusters = i, init = 'k-means++', max_iter =300, n_init = 5, random_state = 0)
+	for i in range (1,1):
+		kmeans = KMeans(n_clusters = i, init = 'k-means++', max_iter =200, n_init = 1, random_state = 0)
 		kmeans.fit(X)
 		wcss.append(kmeans.inertia_) #Within Cluster Sum of Squares
 
 	# Applying KMeans to the dataset with the optimal number of cluster
-	kmeans=KMeans(n_clusters = 2, init = 'k-means++', max_iter = 300, n_init = 5, random_state = 0)
+	kmeans=KMeans(n_clusters = 1, init = 'k-means++', max_iter = 200, n_init = 1, random_state = 0)
 	Y_Kmeans = kmeans.fit_predict(X)
 
 
@@ -144,7 +145,9 @@ def driverList(UserID):
 	dataset.sort_values(by='Cluster',  inplace=True)
 	dataset.to_csv('final.csv', index=False)
 
+	dataset = pd.read_csv('final.csv')
 	#specify the cluster where the particular passenger belongs to
+	print("kkkk"+UID)
 	n = dataset[dataset['UID']== UID].iloc[:,11].values[0]
 
 	#ds = X[np.where(kmeans.labels_== n)] #get particular cluster
@@ -185,9 +188,10 @@ def driverList(UserID):
 		formattedUIDList.append(uid[0]) 
 		#print(uid)
 
-	#f.open("availableDrivers.csv", "w+")
-	#f.close()
-	
+	f = open("availableDrivers.csv", "w+")
+	f.close()
+	os.remove("newUsers.csv")
+	os.remove("final.csv")
 	#filteredList = [1,2,3,4,5]
 
 	#dataset = pd.DataFrame(filteredList)
@@ -198,4 +202,4 @@ def driverList(UserID):
 
 	
 if __name__ == '__main__':
-	app.run(debug=True, host="192.168.8.100", port=99)
+	app.run(debug=True, host="192.168.43.102", port=99)
