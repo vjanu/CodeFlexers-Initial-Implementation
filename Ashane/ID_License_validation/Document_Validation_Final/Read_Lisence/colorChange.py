@@ -1,12 +1,11 @@
 import cv2
 from PIL import Image
 import numpy as np
-#import intensity2 as intensity
-
-#originalPath = intensity.sourcePath
 
 def colorChange(originalPath):
-    imagePath="tes-img/sharpened_morecontrast.jpg"
+    name = originalPath[8:-4]
+    print(name)
+    imagePath="tes-img/"+name+"sharpened_morecontrast.jpg"
     try:
         im = Image.open(imagePath)
     except:
@@ -21,7 +20,7 @@ def colorChange(originalPath):
     data[..., :-1][black_areas.T] = (255, 0, 0)
     im3 = Image.fromarray(data)
     #im3.show()
-    im3.save("tes-img/changedclr1.bmp")
+    im3.save("tes-img/"+name+"changedclr1.bmp")
 
     #To eliminate unimportant areas in the image
     data = np.array(im3)   # "data" is a height x width x 4 numpy array
@@ -30,12 +29,12 @@ def colorChange(originalPath):
     data[..., :-1][white_areas.T] = (255, 255, 255) # Transpose back needed
     im2 = Image.fromarray(data)
     #im2.show()
-    im2.save("tes-img/changedclr.bmp")
+    im2.save("tes-img/"+name+"changedclr.bmp")
 
 #######################################################################
-    img = cv2.imread(originalPath)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    im2 = cv2.bitwise_not(img)
-    cv2.imwrite("tes-img/negative.png", im2)
-    print("------ Color Change:Successful -------")
+    # img = cv2.imread(originalPath)
+    # img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # im2 = cv2.bitwise_not(img)
+    # cv2.imwrite("tes-img/negative.png", im2)
+    # print("------ Color Change:Successful -------")
 ##########################################################################

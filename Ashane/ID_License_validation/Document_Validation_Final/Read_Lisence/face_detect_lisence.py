@@ -8,6 +8,7 @@ from PIL import Image
 
 def checkFaces(img_path):
     # Get user supplied values
+    count = 0
     picture= Image.open(img_path)
     imagePath = img_path
     cascPath = "haarcascade_frontalface_default.xml"    
@@ -35,8 +36,10 @@ def checkFaces(img_path):
 
     if(len(faces)!=1):
         print("Please insert a valid image")
-        picture.rotate(90, expand=True).save(img_path)
-        checkFaces(img_path)
+        if(count != 3):
+            picture.rotate(90, expand=True).save(img_path)
+            checkFaces(img_path)
+            count=count+1
     else:
         print("Image verified")
 

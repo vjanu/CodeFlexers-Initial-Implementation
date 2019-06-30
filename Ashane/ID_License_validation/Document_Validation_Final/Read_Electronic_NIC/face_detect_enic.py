@@ -1,12 +1,18 @@
 import cv2
 import sys
 import imutils
+from PIL import Image
+import time
 
+count = 0
 # Path of working folder on Disk
-src_path = "tes-img/"
+#src_path = "tes-img/"
 
 def checkFaces(img_path):
+    global count
     # Get user supplied values
+    # count = 0
+    picture= Image.open(img_path)
     imagePath = img_path
     cascPath = "haarcascade_frontalface_default.xml"    
 
@@ -27,24 +33,26 @@ def checkFaces(img_path):
         scaleFactor=1.1,
         minNeighbors=5,
         minSize=(30, 30)
-        #flags = cv2.CV_HAAR_SCALE_IMAGE
     )
 
     print("Found {0} faces!".format(len(faces)))
 
-    if(len(faces)!=1):
+    if(len(faces) < 1):
         print("Please insert a valid image")
+        if(count != 3):
+            picture.rotate(90, expand=True).save(img_path)
+            checkFaces(img_path)     
+            count=count+1
+        else:
+            return 0
     else:
         print("Image verified")
 
-    #Draw a rectangle around the faces
-    for (x, y, w, h) in faces:
-        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    # Draw a rectangle around the faces
+    # for (x, y, w, h) in faces:
+    #     cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-    cv2.imshow("Faces found", image)
-    cv2.waitKey(0)
+    # cv2.imshow("Faces found", image)
+    # cv2.waitKey(0)
+        return int(len(faces))
 
-#Calling the methods
-
-print("--Started image processing for NIC--")
-checkFaces(src_path + "idcard.jpg")

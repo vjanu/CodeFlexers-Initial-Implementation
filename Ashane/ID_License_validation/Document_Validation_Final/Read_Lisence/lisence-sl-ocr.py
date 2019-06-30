@@ -1,5 +1,6 @@
 from flask import jsonify,Flask
 import cv2
+import os
 import numpy as np
 import pytesseract
 import imutils
@@ -13,6 +14,7 @@ import re
 # Path of working folder on Disk
 src_path = "tes-img/"
 filename = ""
+imgname = ""
 # Define as global variable
 Expiration = "Not Found"
 
@@ -29,7 +31,7 @@ def get_stringNewLiscence(img_path):
     img = cv2.erode(img, kernel, iterations=1)
 
     # Write image after removed noise
-    cv2.imwrite(src_path + "removed_noise.png", img)
+    cv2.imwrite(src_path +imgname+ "removed_noise.png", img)
 
     #  Apply threshold to get image with only black and white
     # img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
@@ -37,10 +39,10 @@ def get_stringNewLiscence(img_path):
     ret3,img = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     
     # Write the image after apply opencv to do some ...
-    cv2.imwrite(src_path + "thres.png", img)
+    cv2.imwrite(src_path +imgname+ "thres.png", img)
 
     # Recognize text with tesseract for python
-    result = pytesseract.image_to_string(Image.open(src_path + "thres.png"))
+    result = pytesseract.image_to_string(Image.open(src_path +imgname+ "thres.png"))
     
     #replace chars with needed characters
     result = result.replace("..", ".")
@@ -172,7 +174,7 @@ def get_stringNewLiscenceResized(img_path):
     img = cv2.erode(img, kernel, iterations=1)
 
     # Write image after removed noise
-    cv2.imwrite(src_path + "removed_noise.png", img)
+    cv2.imwrite(src_path +imgname+ "removed_noise.png", img)
 
     #  Apply threshold to get image with only black and white
     # img = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
@@ -180,10 +182,10 @@ def get_stringNewLiscenceResized(img_path):
     ret3,img = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     
     # Write the image after apply opencv to do some ...
-    cv2.imwrite(src_path + "thres.png", img)
+    cv2.imwrite(src_path +imgname+ "thres.png", img)
 
     # Recognize text with tesseract for python
-    result = pytesseract.image_to_string(Image.open(src_path + "thres.png"))
+    result = pytesseract.image_to_string(Image.open(src_path +imgname+ "thres.png"))
     result = result.replace("..", ".")
     result = result.replace("'", "")
     result = result.replace("?", "7")
@@ -292,17 +294,19 @@ app = Flask(__name__)
 @app.route("/lisence/<string:location>")
 def main(location):
     global filename
-    filename = location   
+    global imgname
+    filename = location 
+    imgname = location[:-4]  
     print('--- Start recognize text from lisence ---')
     try:  
-        if(fd.checkFaces(src_path + filename) >= 1): 
+        if(int(fd.checkFaces(src_path + filename)) >= 1): 
             intensity.intensityMain(src_path + filename)
             cc.colorChange(src_path + filename)
             result1 = get_stringNewLiscence(src_path +filename)
             if(result1 == ['1', '9', 'N', 'o', 't', ' ', 'F', '0', 'o', 'u', 'n', 'd'] ):
-                result2 = get_stringNewLiscence(src_path + "changedclr1.bmp")
+                result2 = get_stringNewLiscence(src_path +imgname+ "changedclr1.bmp")
                 if(result2 == ['1', '9', 'N', 'o', 't', ' ', 'F', '0', 'o', 'u', 'n', 'd']): 
-                    result3 = get_stringNewLiscence(src_path + "changedclr.bmp")
+                    result3 = get_stringNewLiscence(src_path +imgname+ "changedclr.bmp")
                     print(result3)
                     ExtractedNIC=result3
                     Description="Processed"
@@ -325,6 +329,13 @@ def main(location):
         Description="Unexpected error,Unable to process the image,Please check the path" 
     print("------ Done -------")
     
+    #TODO:REMOVE SOURSE FILE ALSO
+    os.remove(src_path +imgname+ "changedclr1.bmp")
+    os.remove(src_path +imgname+ "changedclr.bmp")
+    os.remove(src_path +imgname+ "sharpened.jpg")
+    os.remove(src_path +imgname+ "sharpened_morecontrast.jpg")
+    os.remove(src_path +imgname+ "removed_noise.png")
+    os.remove(src_path +imgname+ "thres.png")
     data =[{'ExtractedNIC' : ExtractedNIC ,'Expiration' : Expiration,'Description':Description}]
     
     return jsonify(data), 200

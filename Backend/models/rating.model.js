@@ -156,6 +156,7 @@ exports.reportDrivers = function (req,res) {
 
 
 
+
 //model to get personal rating from table view response as a JSON Object
 exports.getPersonalRatingsObject = function (req,res) {
    var pid = "'" + req.params.personid + "'";
@@ -184,3 +185,18 @@ exports.getvehicleRatingsObject = function (req,res) {
         console.log(err);
    })
 };
+
+//model to get reported drivers
+exports.getReportedDrivers = function (req,res) {
+    var uid = "'" + req.params.uid + "'";
+    var sql="SELECT * FROM reported_drivers where PUID =" + uid
+    var query= db.query(sql,(err,rows,results)=>{
+        if(!err){
+            res.send(rows);
+         //    console.log(rows);
+        }
+        else
+         console.log(err);
+    })
+ };
+

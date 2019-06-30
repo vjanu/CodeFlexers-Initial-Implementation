@@ -10,6 +10,7 @@ const ratingModel = require('../models/rating.model');
  router.post('/copassenger-rating',ratingModel.addCopassengerRating);
  router.post('/vehicle-rating',ratingModel.addVehicleRating);
  router.post('/reportDrivers',ratingModel.reportDrivers);
+ router.get('/reportDrivers/:uid',ratingModel.getReportedDrivers);
 
  router.get('/personalsObject/:personid',ratingModel.getPersonalRatingsObject);
  router.get('/vehiclesObject/:vehicleid',ratingModel.getvehicleRatingsObject);
