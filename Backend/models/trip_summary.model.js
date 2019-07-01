@@ -28,3 +28,18 @@ exports.getCurrentPassenger = function (req,res) {
     })
  };
 
+
+  //model to get current passengers
+exports.getAcceptPassenger = function (req,res) {
+    var tripId = "'" + req.params.tripId + "'";
+    var sql="SELECT COUNT(*) AS Count FROM current_passengers WHERE trip_status = '0' and tripId=" + tripId
+    var query= db.query(sql,(err,rows,results)=>{
+        if(!err){
+            res.send(rows[0]);
+         //    console.log(rows);
+        }
+        else
+         console.log(err);
+    })
+ };
+

@@ -22,4 +22,8 @@ router.put('/offerRide/end/:tripId',tripModel.UpdateStatus_end_offerRide);
 router.post('/migrate/currentPassengers',tripModel.migrateCurrentPassengers);
 router.delete('/delete/currentPassengers/:tripId',tripModel.deleteCurrentPassengers);
 
+router.get('/history/passenger/:userId',tripModel.getTripHistoryPassenger);
+router.get('/history/driver/:userId',tripModel.getTripHistoryDriver);
+
+
 module.exports=router;
