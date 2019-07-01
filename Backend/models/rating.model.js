@@ -29,6 +29,20 @@ exports.getvehicleRatings = function (req,res) {
    })
 };
 
+//model to get vehicle rating from table view
+exports.getCopassengerList = function (req,res) {
+   var TripID = "'" + req.params.tripId + "'";
+   var sql="SELECT * FROM V_COPASSENGERS_IN_TRIPS where TripID =" + TripID
+   var query= db.query(sql,(err,rows,results)=>{
+       if(!err){
+           res.send(rows);
+        //    console.log(rows);
+       }
+       else
+        console.log(err);
+   })
+};
+
 //model to add driver rating by passenger
 exports.addDriverRating = function (req,res) {
    var rbody = req.body;    
