@@ -288,3 +288,33 @@ exports.migrateCurrentPassengers = function (req,res) {
        console.log(err);
   })
 };
+
+
+//trip use as a passenger
+exports.getTripHistoryPassenger = function (req,res) {
+  var userId = "'" + req.params.userId + "'";
+  var sql="SELECT *  from trip_history where passengerId="+userId
+  var query= db.query(sql,(err,rows,results)=>{
+      if(!err){
+          res.send(rows);
+          console.log("getHistoryPassenger" + rows);
+      }
+      else
+       console.log(err);
+  })
+};
+
+
+//trip use as a passenger
+exports.getTripHistoryDriver = function (req,res) {
+  var userId = "'" + req.params.userId + "'";
+  var sql="SELECT distinct tripId FROM plusgo.trip_history where driverId ="+userId
+  var query= db.query(sql,(err,rows,results)=>{
+      if(!err){
+          res.send(rows);
+          console.log("getHistoryDriver" + rows);
+      }
+      else
+       console.log(err);
+  })
+};
