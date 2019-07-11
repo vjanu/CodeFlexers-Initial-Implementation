@@ -8,6 +8,8 @@ router.get('/',loginModel.getUsers);
 router.get('/validate/:uname',loginModel.getSpecificUserName);
 //controller to add users
 router.post('/',loginModel.addUser);
+//controller to add spouse
+router.post('/spouse',loginModel.addSpouse);
 //controller to get user's username and passwords
 router.get('/specific/:username/:password',loginModel.getSpecificUser);
 //delete users

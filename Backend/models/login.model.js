@@ -35,7 +35,29 @@ exports.addUser = function (req,res) {
         UserID:UID,
         Username:rbody.Username,
         Password:rbody.Password,
-        Email:rbody.Email
+        Email:rbody.Email,
+        Status: rbody.Status
+    };
+    var sql='INSERT INTO login SET ?'
+    var query = db.query(sql,post,(err,rows,results)=>{
+        if(!err){
+            res.send(rows);
+            console.log(rows);
+        }
+        else
+         console.log(err);
+    })
+ };
+
+ //model to add spouse
+exports.addSpouse = function (req,res) {
+    var rbody = req.body;
+    var post = {
+        UserID:rbody.UserID,
+        Username:rbody.Username,
+        Password:rbody.Password,
+        Email:rbody.Email,
+        Status: rbody.Status
     };
     var sql='INSERT INTO login SET ?'
     var query = db.query(sql,post,(err,rows,results)=>{
