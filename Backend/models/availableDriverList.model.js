@@ -3,8 +3,16 @@ var db = require('../db.schema');
 //model to get specific vehicle
 exports.getSpecificDriverDetails = function (req,res) { //time  
     console.log(req.params.uid);
+    
     //var uid = "'" + req.params.uid + "'";
     var data = req.params.uid;
+    console.log(Object.keys(data).length);
+    if(Object.keys(data).length == 2){
+        console.log("No Drivers");
+        res.send("No Drivers");
+    }
+    else{
+        console.log("Drivers");
     //var data1=['U1558711443506', 'U1558711443507', 'U1558711443512', 'U1558711443513', 'U1558711443514']
 
     var x = data.replace('[','')
@@ -26,4 +34,5 @@ exports.getSpecificDriverDetails = function (req,res) { //time
         else
          console.log(err);
     })
+}
  };
