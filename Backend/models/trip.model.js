@@ -7,7 +7,7 @@ exports.getAllCurrentUsers = function (req,res) {
   var tripId = "'" + req.params.tripId + "'";
   console.log(tripId)
   var tripId = "'" + req.params.tripId + "'";
-   var sql="SELECT  cp.tripId,cp.passengerId,cp.driverId,cp.source,cp.destination,cp.trip_status,cp.price,u.UserID,u.Token,u.FullName FROM current_passengers cp ,  users u where  cp.passengerId = u.UserID and cp.tripId = "+tripId
+   var sql="SELECT  cp.tripId,cp.passengerId,cp.driverId,cp.source,cp.destination, ts.description as trip_status,cp.price,u.UserID,u.Token,u.FullName FROM current_passengers cp ,  users u ,tripStatus ts where  cp.passengerId = u.UserID and cp.trip_status = ts.statusId and cp.tripId ="+tripId
    var query= db.query(sql,(err,rows,results)=>{
        if(!err){
         res.end(JSON.stringify({'currentUsers':rows}));
@@ -123,7 +123,7 @@ exports.UpdateFareCalculation = function (req,res) {
    console.log(tripId)
    console.log(passengerId)
    console.log(driverId)
-   console.log(rbody.price)
+
    var sql="Update current_passengers SET startMileage=?,price=? Where tripId ="+tripId+" and passengerId ="+ passengerId +" and driverId =" +driverId + " and trip_status=1"
    db.query(sql,[rbody.startMileage,rbody.price], function (err,rows, result) {
        if(!err){
@@ -136,39 +136,42 @@ exports.UpdateFareCalculation = function (req,res) {
 
 
 //Update Price and Mileage
-exports.UpdateFareCalculationDropOffUser = function (req,res) {
-   var tripId = "'" + req.params.tripId + "'";
-   var passengerId = "'" + req.params.passengerId + "'";
-   var driverId = "'" + req.params.driverId + "'";
-   var rbody = req.body;
-   console.log(tripId)
-   console.log(passengerId)
-   console.log(driverId)
-   var sql="Update current_passengers SET startMileage=?,price=? Where tripId ="+tripId+" and passengerId ="+ passengerId +" and driverId =" +driverId + " and trip_status=2"
-   db.query(sql,[rbody.startMileage,rbody.price], function (err,rows, result) {
-       if(!err){
-         res.send(rows);
-       }
-       else
-        console.log(err);
-   })
-};
+// exports.UpdateFareCalculationDropOffUser = function (req,res) {
+//    var tripId = "'" + req.params.tripId + "'";
+//    var passengerId = "'" + req.params.passengerId + "'";
+//    var driverId = "'" + req.params.driverId + "'";
+//    var rbody = req.body;
+//    console.log(tripId)
+//    console.log(passengerId)
+//    console.log(driverId)
+//    console.log(rbody.price)
+//   //  var sql="Update current_passengers SET startMileage=?,price=? Where tripId ="+tripId+" and passengerId ="+ passengerId +" and driverId =" +driverId + " and trip_status=2"
+//   var sql="Update current_passengers SET startMileage=?,price=? Where tripId ="+tripId+" and passengerId ="+ passengerId +" and driverId =" +driverId
+//    db.query(sql,[rbody.startMileage,rbody.price], function (err,rows, result) {
+//        if(!err){
+//          res.send(rows);
+//          console.log(rows);
+//        }
+//        else
+//         console.log(err);
+//    })
+// };
 
-//to get a drop off passenger Details
- exports.getDropOffPassengersDetails = function (req,res) {
-   var tripId = "'" + req.params.tripId + "'";
-   var passengerId = "'" + req.params.passengerId + "'";
-   var driverId = "'" + req.params.driverId + "'";
-   var sql="SELECT passengerId,startMileage,price from current_passengers where tripId="+tripId+" and passengerId="+passengerId +" and trip_status=2 and driverId="+driverId
-   var query= db.query(sql,(err,rows,results)=>{
-       if(!err){
-           res.send(rows);
-           console.log("getAllCurrentPassengersDetails" + rows);
-       }
-       else
-        console.log(err);
-   })
-};
+// //to get a drop off passenger Details
+//  exports.getDropOffPassengersDetails = function (req,res) {
+//    var tripId = "'" + req.params.tripId + "'";
+//    var passengerId = "'" + req.params.passengerId + "'";
+//    var driverId = "'" + req.params.driverId + "'";
+//    var sql="SELECT passengerId,startMileage,price from current_passengers where tripId="+tripId+" and passengerId="+passengerId +" and trip_status=2 and driverId="+driverId
+//    var query= db.query(sql,(err,rows,results)=>{
+//        if(!err){
+//            res.send(rows);
+//            console.log("getAllCurrentPassengersDetails" + rows);
+//        }
+//        else
+//         console.log(err);
+//    })
+// };
 
 
 //model to add Trip Request 
@@ -180,7 +183,7 @@ exports.addRequestTrip = function (req,res) {
     driverId:rbody.driverId, 
     source:rbody.source,
     destination:rbody.destination,
-    trip_status:"4",
+    trip_status:"3",
     startMileage:"0",
     price:"0",
     
@@ -217,6 +220,7 @@ exports.AcceptRideRequest = function (req,res) {
        console.log(err);
   })
 };
+
 
 
 //to update the offride status when driver start the trip
@@ -293,11 +297,12 @@ exports.migrateCurrentPassengers = function (req,res) {
 //trip use as a passenger
 exports.getTripHistoryPassenger = function (req,res) {
   var userId = "'" + req.params.userId + "'";
-  var sql="SELECT *  from trip_history where passengerId="+userId
+  var sql="SELECT *  from current_passengers cp,users u where passengerId="+userId + " and cp.driverId = u.UserID"
+  //var sql="SELECT  th.tripId,th.dateTime,th.source,th.destination,th.fare,u.FullName from trip_history th,users u where passengerId="+userId + " and th.passengerId = u.UserID"
   var query= db.query(sql,(err,rows,results)=>{
       if(!err){
-          res.send(rows);
-          console.log("getHistoryPassenger" + rows);
+        res.end(JSON.stringify({'passenger':rows}));
+        console.log(rows);
       }
       else
        console.log(err);
@@ -311,8 +316,45 @@ exports.getTripHistoryDriver = function (req,res) {
   var sql="SELECT distinct tripId FROM plusgo.trip_history where driverId ="+userId
   var query= db.query(sql,(err,rows,results)=>{
       if(!err){
-          res.send(rows);
+        res.end(JSON.stringify({'passenger':rows}));
           console.log("getHistoryDriver" + rows);
+      }
+      else
+       console.log(err);
+  })
+};
+
+
+//get Copassengers of the specific Trip
+exports.getCopassengerofSpecificTrip = function (req,res) {
+  var tripId = "'" + req.params.tripId + "'";
+  var userId = "'" + req.params.userId + "'";
+  var sql="SELECT cp.tripId,cp.passengerId,u.FullName,cp.source,cp.destination,u.img FROM current_passengers cp ,users u where tripId = "+tripId + " and cp.passengerId = u.UserID and cp.passengerId !="+ userId ;
+  var query= db.query(sql,(err,rows,results)=>{
+      if(!err){
+        res.end(JSON.stringify({'coPassengers':rows}));
+          //console.log("getHistoryDriver" + rows);
+      }
+      else
+       console.log(err);
+  })
+};
+
+//Passenger Cancel the ride request
+exports.CancelRequest = function (req,res) {
+  
+  var tripId = "'" + req.params.tripId + "'";
+  var passengerId = "'" + req.params.passengerId + "'";
+  var driverId = "'" + req.params.driverId + "'";
+  var rbody = req.body;
+  console.log(rbody.trip_status)
+  console.log(tripId)
+  console.log(passengerId)
+  console.log(driverId)
+  var sql="Update current_passengers SET trip_status=? Where tripId ="+tripId+" and passengerId ="+ passengerId +" and driverId =" +driverId
+  db.query(sql,[rbody.trip_status], function (err,rows, result) {
+      if(!err){
+        res.send(rows);
       }
       else
        console.log(err);
