@@ -4,8 +4,8 @@ const mysql = require('mysql');
 // const db = mysql.createConnection({
 //     host:'localhost',
 //     user:'root',//admin
-//     password:'root',//123
-//     database:'plus_go'
+//     password:'',//123
+//     database:'plusgo_local'
 // })
 
 const db = mysql.createConnection({

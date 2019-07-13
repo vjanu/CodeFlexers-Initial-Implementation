@@ -9,11 +9,12 @@ router.put('/update/endRide/:tripId/:passengerId/:driverId',tripModel.UpdateStat
 router.get('/specific/:tripId/:passengerId/:driverId',tripModel.getPassengerStartMileage);
 router.get('/getDetails/:tripId/:driverId',tripModel.getAllCurrentPassengersDetails);
 router.put('/update/fare/:tripId/:passengerId/:driverId',tripModel.UpdateFareCalculation);
-router.put('/update/fare/dropoff/:tripId/:passengerId/:driverId',tripModel.UpdateFareCalculationDropOffUser);
-router.get('/update/fare/dropoff/:tripId/:passengerId/:driverId',tripModel.getDropOffPassengersDetails);
+// router.put('/update/fare/dropoff/:tripId/:passengerId/:driverId',tripModel.UpdateFareCalculationDropOffUser);
+// router.get('/update/fare/dropoff/:tripId/:passengerId/:driverId',tripModel.getDropOffPassengersDetails);
 
 router.post('/newRequest',tripModel.addRequestTrip);
 router.put('/accept/:tripId/:passengerId/:driverId',tripModel.AcceptRideRequest);
+router.put('/cancel/:tripId/:passengerId/:driverId',tripModel.CancelRequest);
 router.get('/price/:tripId/:passengerId/:driverId',tripModel.getPassengerPrice);
 
 router.put('/offerRide/start/:tripId',tripModel.UpdateStatus_start_offerRide);
@@ -23,7 +24,10 @@ router.post('/migrate/currentPassengers',tripModel.migrateCurrentPassengers);
 router.delete('/delete/currentPassengers/:tripId',tripModel.deleteCurrentPassengers);
 
 router.get('/history/passenger/:userId',tripModel.getTripHistoryPassenger);
-router.get('/history/driver/:userId',tripModel.getTripHistoryDriver);
+//router.get('/history/driver/:userId',tripModel.getTripHistoryDriver);
+
+router.get('/history/copassengers/:tripId/:userId',tripModel.getCopassengerofSpecificTrip);
+
 
 
 module.exports=router;

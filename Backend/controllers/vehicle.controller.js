@@ -8,5 +8,6 @@ router.get('/specificVID/:uid',vehicleModel.getVehicleIDbyUser);
 router.post('/',vehicleModel.addVehicle);
 router.delete('/delete/:uid',vehicleModel.deleteSpecificVehicle);
 router.put('/update/:uid',vehicleModel.updateSpecificVehicle);
+router.get('/specific/object/:uid',vehicleModel.getSpecificVehicleObject);
 
 module.exports=router;
