@@ -12,7 +12,9 @@
 	} else {
 		$random = random_word(20);
 			
-		$path = "file:///C:/Users/Ashane/Desktop/Read_Old_NIC/tes-img/".$name.".png";
+		include 'basecontent.php';
+		
+		$path = $basefilepath."/Read_Electronic_NIC/tes-img/".$name.".png";
 	
 			chmod ($path, 0777);
 			file_put_contents($path,base64_decode($image));

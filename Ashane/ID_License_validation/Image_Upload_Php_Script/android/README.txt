@@ -6,4 +6,4 @@ or
 *Make sure you have permissions to access the folders of server using external devices
 *Make sure to give necessary read write permissions in ubuntu devices
 
-*Go to the files inside android folder and check whether $path is correct with deployed location of tes-img folder in both NIC and Lisence folder
+*Go to the files inside android/basecontent.php and check whether $basefilepath is correct with deployed location of folder
