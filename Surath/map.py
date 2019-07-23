@@ -42,6 +42,6 @@ def distance_duration(source,destination) :
     return jsonify(duration=my_duration,distance=my_distance)
 
 
-app.run(debug=True,host="192.168.8.100",port=8097)
+app.run(debug=True,host="0.0.0.0",port=8097)
 #if __name__ == '__main__':
 #    app.run(debug=True)
