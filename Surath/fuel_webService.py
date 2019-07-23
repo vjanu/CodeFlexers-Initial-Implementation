@@ -66,6 +66,6 @@ def fuelPrediction(manYear,regYear,cylinders,fuel ,capacity,kW,mileage) :
     return jsonify(fuelPrediction=finalResult)
 
 
-app.run(debug=True,host="192.168.8.100",port=8096)
+app.run(debug=True,host="0.0.0.0",port=8096)
 #if __name__ == '__main__':
 #    app.run(debug=True)
