@@ -24,7 +24,7 @@ router.post('/migrate/currentPassengers',tripModel.migrateCurrentPassengers);
 router.delete('/delete/currentPassengers/:tripId',tripModel.deleteCurrentPassengers);
 
 router.get('/history/passenger/:userId',tripModel.getTripHistoryPassenger);
-//router.get('/history/driver/:userId',tripModel.getTripHistoryDriver);
+router.get('/history/driver/:userId',tripModel.getTripHistoryDriver);
 
 router.get('/history/copassengers/:tripId/:userId',tripModel.getCopassengerofSpecificTrip);
 

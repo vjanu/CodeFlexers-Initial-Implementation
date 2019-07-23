@@ -7,7 +7,7 @@ exports.getAllCurrentUsers = function (req,res) {
   var tripId = "'" + req.params.tripId + "'";
   console.log(tripId)
   var tripId = "'" + req.params.tripId + "'";
-   var sql="SELECT  cp.tripId,cp.passengerId,cp.driverId,cp.source,cp.destination, ts.description as trip_status,cp.price,u.UserID,u.Token,u.FullName FROM current_passengers cp ,  users u ,tripStatus ts where  cp.passengerId = u.UserID and cp.trip_status = ts.statusId and cp.tripId ="+tripId
+   var sql="SELECT  cp.tripId,cp.passengerId,cp.driverId,cp.source,cp.destination, ts.description as trip_status,cp.price,u.UserID,u.Token,u.FullName,u.img FROM current_passengers cp ,  users u ,tripStatus ts where  cp.passengerId = u.UserID and cp.trip_status = ts.statusId and cp.tripId ="+tripId
    var query= db.query(sql,(err,rows,results)=>{
        if(!err){
         res.end(JSON.stringify({'currentUsers':rows}));
@@ -183,6 +183,8 @@ exports.addRequestTrip = function (req,res) {
     driverId:rbody.driverId, 
     source:rbody.source,
     destination:rbody.destination,
+    sourceLatLong:rbody.sourceLatLong,
+    destinationLatLong:rbody.destinationLatLong,
     trip_status:"3",
     startMileage:"0",
     price:"0",
@@ -297,7 +299,8 @@ exports.migrateCurrentPassengers = function (req,res) {
 //trip use as a passenger
 exports.getTripHistoryPassenger = function (req,res) {
   var userId = "'" + req.params.userId + "'";
-  var sql="SELECT *  from current_passengers cp,users u where passengerId="+userId + " and cp.driverId = u.UserID"
+  //Trip Should be ended before comming for the trip history
+  var sql="SELECT *  from current_passengers cp,users u where passengerId="+userId + "and trip_status=2 and cp.driverId = u.UserID"
   //var sql="SELECT  th.tripId,th.dateTime,th.source,th.destination,th.fare,u.FullName from trip_history th,users u where passengerId="+userId + " and th.passengerId = u.UserID"
   var query= db.query(sql,(err,rows,results)=>{
       if(!err){
@@ -313,11 +316,12 @@ exports.getTripHistoryPassenger = function (req,res) {
 //trip use as a passenger
 exports.getTripHistoryDriver = function (req,res) {
   var userId = "'" + req.params.userId + "'";
-  var sql="SELECT distinct tripId FROM plusgo.trip_history where driverId ="+userId
+  //var sql="SELECT distinct tripId FROM plusgo.trip_history where driverId ="+userId
+  var sql = "SELECT offer.OID, offer.UserID, offer.StartDate,offer.StartTime, offer.Source, offer.Destination, SUM(cp.price) AS Earn FROM offerride offer , current_passengers cp where UserID ="+userId+" and trip_status=2 and offer.OID = cp.tripId  and OID IN (SELECT tripId from current_passengers where driverId = " +userId+ ")  group by cp.tripId";
   var query= db.query(sql,(err,rows,results)=>{
       if(!err){
-        res.end(JSON.stringify({'passenger':rows}));
-          console.log("getHistoryDriver" + rows);
+        res.end(JSON.stringify({'driver':rows}));
+          
       }
       else
        console.log(err);
@@ -329,7 +333,7 @@ exports.getTripHistoryDriver = function (req,res) {
 exports.getCopassengerofSpecificTrip = function (req,res) {
   var tripId = "'" + req.params.tripId + "'";
   var userId = "'" + req.params.userId + "'";
-  var sql="SELECT cp.tripId,cp.passengerId,u.FullName,cp.source,cp.destination,u.img FROM current_passengers cp ,users u where tripId = "+tripId + " and cp.passengerId = u.UserID and cp.passengerId !="+ userId ;
+  var sql="SELECT cp.tripId,cp.passengerId,u.FullName,cp.source,cp.destination,u.img FROM current_passengers cp ,users u where tripId = "+tripId + "and trip_status=2 and cp.passengerId = u.UserID and cp.passengerId !="+ userId ;
   var query= db.query(sql,(err,rows,results)=>{
       if(!err){
         res.end(JSON.stringify({'coPassengers':rows}));
