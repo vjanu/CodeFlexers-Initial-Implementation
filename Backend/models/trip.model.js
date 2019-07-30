@@ -313,7 +313,42 @@ exports.getTripHistoryPassenger = function (req,res) {
 };
 
 
-//trip use as a passenger
+//To get Driver Inforation According to the Trip
+exports.getPassengerDetailsAccordingToTrip = function (req,res) {
+  var driverId = "'" + req.params.driverId + "'";
+  
+  var sql="select u.FullName, v.brand,v.Model,v.VNumber,u.img from users u , vehicle v where u.UserID =" +driverId+ " and u.UserID = v.UserID;"
+  var query= db.query(sql,(err,rows,results)=>{
+      if(!err){
+        res.send(rows[0]);
+        console.log(rows);
+      }
+      else
+       console.log(err);
+  })
+};
+
+//get price of the trip for specific passenger
+exports.getPriceForSpecificPassenger = function (req,res) {
+  var passengerId = "'" + req.params.passengerId + "'";
+  var tripId = "'" + req.params.tripId + "'";
+  
+ // var sql="select u.FullName, v.brand,v.Model,v.VNumber,u.img from users u , vehicle v where u.UserID =" +driverId+ " and u.UserID = v.UserID;"
+ var sql="SELECT price  from current_passengers where passengerId=" +passengerId+ "  and tripId="+tripId+ " and trip_status=2 ;"
+  var query= db.query(sql,(err,rows,results)=>{
+      if(!err){
+        res.send(rows[0]);
+        console.log(rows);
+      }
+      else
+       console.log(err);
+  })
+};
+
+
+
+
+//trip use as a driver
 exports.getTripHistoryDriver = function (req,res) {
   var userId = "'" + req.params.userId + "'";
   //var sql="SELECT distinct tripId FROM plusgo.trip_history where driverId ="+userId
@@ -328,12 +363,29 @@ exports.getTripHistoryDriver = function (req,res) {
   })
 };
 
+//Driver Receipt
+exports.getDriverReceipt = function (req,res) {
+  var userId = "'" + req.params.userId + "'";
+  var tripId = "'" + req.params.tripId + "'";
+  //var sql="SELECT distinct tripId FROM plusgo.trip_history where driverId ="+userId
+  var sql = "SELECT  SUM(cp.price) AS Earn FROM offerride offer , current_passengers cp where UserID = "+userId+ " and trip_status=2 and offer.OID = cp.tripId  and cp.tripId="+ tripId +"  group by cp.tripId";
+  var query= db.query(sql,(err,rows,results)=>{
+      if(!err){
+        res.send(rows[0]);
+        console.log(rows);
+          
+      }
+      else
+       console.log(err);
+  })
+};
+
 
 //get Copassengers of the specific Trip
 exports.getCopassengerofSpecificTrip = function (req,res) {
   var tripId = "'" + req.params.tripId + "'";
   var userId = "'" + req.params.userId + "'";
-  var sql="SELECT cp.tripId,cp.passengerId,u.FullName,cp.source,cp.destination,u.img FROM current_passengers cp ,users u where tripId = "+tripId + "and trip_status=2 and cp.passengerId = u.UserID and cp.passengerId !="+ userId ;
+  var sql="SELECT cp.tripId,cp.passengerId,u.FullName,cp.source,cp.destination,u.img,cp.price FROM current_passengers cp ,users u where tripId = "+tripId + "and trip_status=2 and cp.passengerId = u.UserID and cp.passengerId !="+ userId ;
   var query= db.query(sql,(err,rows,results)=>{
       if(!err){
         res.end(JSON.stringify({'coPassengers':rows}));
