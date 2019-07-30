@@ -24,7 +24,12 @@ router.post('/migrate/currentPassengers',tripModel.migrateCurrentPassengers);
 router.delete('/delete/currentPassengers/:tripId',tripModel.deleteCurrentPassengers);
 
 router.get('/history/passenger/:userId',tripModel.getTripHistoryPassenger);
+router.get('/history/passenger/driverDetails/:driverId',tripModel.getPassengerDetailsAccordingToTrip);
+router.get('/history/passenger/receipt/:passengerId/:tripId',tripModel.getPriceForSpecificPassenger);
+
+
 router.get('/history/driver/:userId',tripModel.getTripHistoryDriver);
+router.get('/history/driver/receipt/:userId/:tripId',tripModel.getDriverReceipt);
 
 router.get('/history/copassengers/:tripId/:userId',tripModel.getCopassengerofSpecificTrip);
 
